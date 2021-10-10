@@ -50,17 +50,20 @@ void textbox_render(struct Textbox* self, SDL_Renderer* rend)
 
 void textbox_move_cursor(struct Textbox* self, int x, int y)
 {
-    if (self->cursor_pos.x + x >= 0 &&
-        self->cursor_pos.x + x <= strlen(self->text->lines[self->cursor_pos.y]))
-        self->cursor_pos.x += x;
+    self->cursor_pos.x += x;
 
-    if (self->cursor_pos.y + y >= 0 &&
-        self->cursor_pos.y + y < self->text->nlines)
-    {
-        self->cursor_pos.y += y;
-        textbox_cond_jump_to_eol(self);
-    }
+    if (self->cursor_pos.x < 0)
+        self->cursor_pos.x = 0;
 
+    self->cursor_pos.y += y;
+
+    if (self->cursor_pos.y < 0)
+        self->cursor_pos.y = 0;
+
+    if (self->cursor_pos.y >= self->text->nlines)
+        self->cursor_pos.y = self->text->nlines - 1;
+
+    textbox_cond_jump_to_eol(self);
     textbox_move_view_cursor(self);
 }
 

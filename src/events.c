@@ -84,6 +84,24 @@ void events_mouse_left(struct Prog* p, SDL_Event* evt)
         p->selected_textbox = p->main_textbox;
     else
         p->selected_textbox = 0;
+
+    if (p->selected_textbox)
+    {
+        SDL_Point rel = {
+            .x = mouse.x - p->selected_textbox->rect.x,
+            .y = mouse.y - p->selected_textbox->rect.y
+        };
+
+        SDL_Point dst = {
+            .x = (rel.x - (rel.x % p->selected_textbox->text->char_dim.x)) / p->selected_textbox->text->char_dim.x + p->selected_textbox->view_pos.x,
+            .y = (rel.y - (rel.y % p->selected_textbox->text->char_dim.y)) / p->selected_textbox->text->char_dim.y + p->selected_textbox->view_pos.y
+        };
+
+        textbox_move_cursor(p->selected_textbox,
+            dst.x - p->selected_textbox->cursor_pos.x,
+            dst.y - p->selected_textbox->cursor_pos.y
+        );
+    }
 }
 
 
