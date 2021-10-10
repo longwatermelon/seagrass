@@ -35,8 +35,13 @@ void text_free(struct Text* self)
 }
 
 
-void text_render(struct Text* self, SDL_Renderer* rend)
+void text_render(struct Text* self, SDL_Renderer* rend, SDL_Point view_pos)
 {
+    SDL_Point pix_view_point = {
+        .x = view_pos.x * self->char_dim.x,
+        .y = view_pos.y * self->char_dim.y
+    };
+
     for (int i = 0; i < self->nlines; ++i)
     {
         if (!self->textures[i])
@@ -44,11 +49,20 @@ void text_render(struct Text* self, SDL_Renderer* rend)
 
         SDL_Rect dst = {
             .x = self->pos.x,
-            .y = self->pos.y + i * self->char_dim.y
+            .y = self->pos.y + i * self->char_dim.y - pix_view_point.y
         };
 
+        if (dst.y < self->pos.y)
+            continue;
+
         SDL_QueryTexture(self->textures[i], 0, 0, &dst.w, &dst.h);
-        SDL_RenderCopy(rend, self->textures[i], 0, &dst);
+
+        SDL_Rect src = { .x = pix_view_point.x, .y = 0, .w = dst.w, .h = dst.h };
+
+        src.w -= src.x;
+        dst.w -= src.x;
+
+        SDL_RenderCopy(rend, self->textures[i], &src, &dst);
     }
 }
 
