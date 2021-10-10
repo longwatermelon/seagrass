@@ -91,7 +91,7 @@ void text_insert_texture(struct Text* self, SDL_Renderer* rend, int index, const
 }
 
 
-SDL_Texture** text_split_str_into_textures(struct Text* self, SDL_Renderer* rend)
+static SDL_Texture** text_split_str_into_textures(struct Text* self, SDL_Renderer* rend)
 {
     SDL_Texture** textures = malloc(sizeof(SDL_Texture*) * self->nlines);
 

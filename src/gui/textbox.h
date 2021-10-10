@@ -20,6 +20,9 @@ void textbox_render(struct Textbox* self, SDL_Renderer* rend);
 
 void textbox_move_cursor(struct Textbox* self, int x, int y);
 
+// Jump to end of line if cursor is in an illegal position
+void textbox_cond_jump_to_eol(struct Textbox* self);
+
 // Converts character coordinates (row, col) to pixel coordinates
 static SDL_Point textbox_char_to_pix_pos(struct Textbox* self, SDL_Point pos);
 

@@ -6,7 +6,7 @@ struct Textbox* textbox_alloc(SDL_Rect rect, SDL_Renderer* rend, TTF_Font* font,
     struct Textbox* self = malloc(sizeof(struct Textbox));
     self->rect = rect;
 
-    self->text = text_alloc(rend, (SDL_Point){ rect.x, rect.y }, "", font, (SDL_Color){ 255, 255, 255 });
+    self->text = text_alloc(rend, (SDL_Point){ rect.x, rect.y }, "ok budaroos\nlawlers", font, (SDL_Color){ 255, 255, 255 });
     self->bg_color = color;
 
     self->cursor_pos = (SDL_Point){ .x = 0, .y = 0 };
@@ -39,11 +39,23 @@ void textbox_render(struct Textbox* self, SDL_Renderer* rend)
 
 void textbox_move_cursor(struct Textbox* self, int x, int y)
 {
-    if (self->cursor_pos.x + x >= 0)
+    if (self->cursor_pos.x + x >= 0 &&
+            self->cursor_pos.x + x <= strlen(self->text->lines[self->cursor_pos.y]))
         self->cursor_pos.x += x;
 
-    if (self->cursor_pos.y + y >= 0)
+    if (self->cursor_pos.y + y >= 0 &&
+            self->cursor_pos.y + y < self->text->nlines)
+    {
         self->cursor_pos.y += y;
+        textbox_cond_jump_to_eol(self);
+    }
+}
+
+
+void textbox_cond_jump_to_eol(struct Textbox* self)
+{
+    if (self->cursor_pos.x > strlen(self->text->lines[self->cursor_pos.y]))
+        self->cursor_pos.x = strlen(self->text->lines[self->cursor_pos.y]);
 }
 
 
