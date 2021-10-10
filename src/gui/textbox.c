@@ -116,12 +116,7 @@ void textbox_del_char(struct Textbox* self, SDL_Renderer* rend)
 {
     if (self->cursor_pos.x == 0)
     {
-        if (self->cursor_pos.y == 0)
-            return;
-
-        textbox_move_cursor(self, 0, -1);
-        textbox_move_cursor(self, strlen(self->text->lines[self->cursor_pos.y]), 0);
-        text_remove_texture(self->text, rend, self->cursor_pos.y + 1);
+        textbox_del_nl(self, rend);
     }
     else
     {
@@ -144,6 +139,22 @@ void textbox_del_char(struct Textbox* self, SDL_Renderer* rend)
 
 void textbox_del_nl(struct Textbox* self, SDL_Renderer* rend)
 {
+    if (self->cursor_pos.y == 0)
+        return;
+
+    char* line = self->text->lines[self->cursor_pos.y - 1];
+    char* prev_line = self->text->lines[self->cursor_pos.y];
+
+    textbox_move_cursor(self, 0, -1);
+    textbox_move_cursor(self, strlen(line), 0);
+
+    line = realloc(line, sizeof(char) * (strlen(line) + strlen(prev_line) + 1));
+    strcat(line, prev_line);
+
+    text_redo_texture(self->text, rend, self->cursor_pos.y, line);
+    free(line);
+
+    text_remove_texture(self->text, rend, self->cursor_pos.y + 1);
 }
 
 
