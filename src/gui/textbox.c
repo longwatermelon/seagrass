@@ -28,7 +28,7 @@ void textbox_free(struct Textbox* self)
 }
 
 
-void textbox_render(struct Textbox* self, SDL_Renderer* rend)
+void textbox_render(struct Textbox* self, SDL_Renderer* rend, bool render_cursor)
 {
     SDL_SetRenderDrawColor(rend, self->bg_color.r, self->bg_color.g, self->bg_color.b, 255);
     SDL_RenderFillRect(rend, &self->rect);
@@ -38,15 +38,18 @@ void textbox_render(struct Textbox* self, SDL_Renderer* rend)
     SDL_SetRenderDrawColor(rend, 255, 255, 255, 255);
     SDL_Point pos = textbox_char_to_pix_pos(self, self->cursor_pos);
 
-    SDL_Rect cursor = {
-        .x = pos.x - (self->view_pos.x * self->text->char_dim.x),
-        .y = pos.y - (self->view_pos.y * self->text->char_dim.y),
-        .w = 2,
-        .h = self->text->char_dim.y
-    };
+    if (render_cursor)
+    {
+        SDL_Rect cursor = {
+            .x = pos.x - (self->view_pos.x * self->text->char_dim.x),
+            .y = pos.y - (self->view_pos.y * self->text->char_dim.y),
+            .w = 2,
+            .h = self->text->char_dim.y
+        };
 
-    if (cursor.y >= self->rect.y)
-        SDL_RenderFillRect(rend, &cursor);
+        if (cursor.y >= self->rect.y)
+            SDL_RenderFillRect(rend, &cursor);
+    }
 }
 
 

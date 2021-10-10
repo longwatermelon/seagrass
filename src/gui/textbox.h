@@ -24,7 +24,7 @@ struct Textbox
 struct Textbox* textbox_alloc(SDL_Rect rect, SDL_Renderer* rend, TTF_Font* font, SDL_Color color);
 void textbox_free(struct Textbox* self);
 
-void textbox_render(struct Textbox* self, SDL_Renderer* rend);
+void textbox_render(struct Textbox* self, SDL_Renderer* rend, bool render_cursor);
 // Render highlighted sections
 void textbox_render_highlight(struct Textbox* self, SDL_Renderer* rend);
 // Highlight a line from index begin to end at index.
