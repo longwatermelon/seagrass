@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 struct Prog
 {
@@ -10,6 +11,8 @@ struct Prog
 
     SDL_Window* window;
     SDL_Renderer* rend;
+
+    TTF_Font* font;
 };
 
 struct Prog* prog_alloc();

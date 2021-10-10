@@ -13,5 +13,6 @@ add_executable(seagrass
     src/events.c
 )
 
+target_compile_options(seagrass PRIVATE -ggdb)
 target_link_libraries(seagrass PRIVATE gui)
 

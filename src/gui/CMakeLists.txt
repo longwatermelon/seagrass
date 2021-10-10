@@ -7,7 +7,11 @@ find_package(sdl2-ttf CONFIG REQUIRED)
 add_library(gui
     text.h
     text.c
+    utils.h
+    utils.c
 )
+
+target_compile_options(gui PRIVATE -ggdb)
 
 target_link_libraries(gui PUBLIC
     SDL2::SDL2 SDL2::SDL2main
