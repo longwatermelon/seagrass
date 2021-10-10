@@ -13,6 +13,8 @@ struct Prog
     SDL_Renderer* rend;
 
     TTF_Font* font;
+
+    struct Textbox* selected_textbox;
 };
 
 struct Prog* prog_alloc();

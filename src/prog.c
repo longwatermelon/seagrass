@@ -14,6 +14,8 @@ struct Prog* prog_alloc()
 
     self->font = TTF_OpenFont("res/gfx/font.ttf", 16);
 
+    self->selected_textbox = 0;
+
     return self;
 }
 
@@ -37,6 +39,7 @@ void prog_mainloop(struct Prog* self)
     /* text_insert_texture(t, self->rend, 1, "aaaaaaaaa"); */
 
     struct Textbox* t = textbox_alloc((SDL_Rect){ 100, 100, 600, 600 }, self->rend, self->font, (SDL_Color){ 100, 100, 100 });
+    self->selected_textbox = t;
 
     while (self->running)
     {

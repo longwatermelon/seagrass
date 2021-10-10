@@ -37,6 +37,16 @@ void textbox_render(struct Textbox* self, SDL_Renderer* rend)
 }
 
 
+void textbox_move_cursor(struct Textbox* self, int x, int y)
+{
+    if (self->cursor_pos.x + x >= 0)
+        self->cursor_pos.x += x;
+
+    if (self->cursor_pos.y + y >= 0)
+        self->cursor_pos.y += y;
+}
+
+
 static SDL_Point textbox_char_to_pix_pos(struct Textbox* self, SDL_Point pos)
 {
     return (SDL_Point){
