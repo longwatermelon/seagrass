@@ -7,13 +7,13 @@ struct Text* text_alloc(SDL_Renderer* rend, SDL_Point pos, const char* contents,
     struct Text* self = malloc(sizeof(struct Text));
 
     self->pos = pos;
-    self->contents = contents;
     self->font = font;
     self->color = color;
 
-    TTF_SizeText(self->font, self->contents, &self->char_dim.x, &self->char_dim.y);
+    self->lines = utils_split_str(contents, '\n', &self->nlines);
+    self->textures = text_split_str_into_textures(self, rend);
 
-    self->textures = text_split_str_into_textures(self, rend, &self->ntextures);
+    TTF_SizeText(self->font, " ", &self->char_dim.x, &self->char_dim.y);
 
     return self;
 }
@@ -21,12 +21,15 @@ struct Text* text_alloc(SDL_Renderer* rend, SDL_Point pos, const char* contents,
 
 void text_free(struct Text* self)
 {
-    for (int i = 0; i < self->ntextures; ++i)
+    for (int i = 0; i < self->nlines; ++i)
     {
         if (self->textures[i])
             SDL_DestroyTexture(self->textures[i]);
+
+        free(self->lines[i]);
     }
 
+    free(self->lines);
     free(self->textures);
     free(self);
 }
@@ -34,7 +37,7 @@ void text_free(struct Text* self)
 
 void text_render(struct Text* self, SDL_Renderer* rend)
 {
-    for (int i = 0; i < self->ntextures; ++i)
+    for (int i = 0; i < self->nlines; ++i)
     {
         SDL_Rect dst = {
             .x = self->pos.x,
@@ -47,43 +50,51 @@ void text_render(struct Text* self, SDL_Renderer* rend)
 }
 
 
-SDL_Texture** text_split_str_into_textures(struct Text* self, SDL_Renderer* rend, int* count)
+void text_redo_textures(struct Text* self, SDL_Renderer* rend)
 {
-    SDL_Texture** textures = malloc(0);
-    *count = 0;
-
-    int prev = 0;
-
-    for (int i = 0; i <= strlen(self->contents); ++i)
+    for (int i = 0; i < self->nlines; ++i)
     {
-        if (self->contents[i] == '\n' || self->contents[i] == '\0')
-        {
-            char* line = utils_substr(self->contents, prev, i);
-
-            textures = realloc(textures, sizeof(SDL_Texture*) * ++*count);
-            textures[*count - 1] = text_render_text(self, rend, line);
-
-            free(line);
-            prev = i + 1;
-
-            if (i + 1 == strlen(self->contents))
-                break;
-        }
+        if (self->textures[i])
+            SDL_DestroyTexture(self->textures[i]);
     }
 
-    return textures;
+    free(self->textures);
+
+    self->textures = text_split_str_into_textures(self, rend);
 }
 
 
-static SDL_Texture* text_render_text(struct Text* self, SDL_Renderer* rend, const char* text)
+void text_redo_texture(struct Text* self, SDL_Renderer* rend, int index, const char* text)
 {
-    if (strlen(text) == 0)
-        return 0;
+    if (self->textures[index])
+        SDL_DestroyTexture(self->textures[index]);
 
-    SDL_Surface* surf = TTF_RenderText_Blended(self->font, text, self->color);
-    SDL_Texture* tex = SDL_CreateTextureFromSurface(rend, surf);
+    self->textures[index] = utils_render_text(rend, text, self->font, self->color);
+}
 
-    SDL_FreeSurface(surf);
-    return tex;
+
+void text_insert_texture(struct Text* self, SDL_Renderer* rend, int index, const char* text)
+{
+    self->lines = realloc(self->lines, sizeof(char*) * (self->nlines + 1));
+    memcpy(&self->lines[index + 1], &self->lines[index], sizeof(char*) * (self->nlines - index));
+    self->lines[index] = malloc(sizeof(char) * strlen(text));
+    memcpy(self->lines[index], text, sizeof(char) * strlen(text));
+
+    self->textures = realloc(self->textures, sizeof(SDL_Texture*) * (self->nlines + 1));
+    memcpy(&self->textures[index + 1], &self->textures[index], sizeof(SDL_Texture*) * (self->nlines - index));
+    self->textures[index] = utils_render_text(rend, text, self->font, self->color);
+
+    ++self->nlines;
+}
+
+
+SDL_Texture** text_split_str_into_textures(struct Text* self, SDL_Renderer* rend)
+{
+    SDL_Texture** textures = malloc(sizeof(SDL_Texture*) * self->nlines);
+
+    for (int i = 0; i < self->nlines; ++i)
+        textures[i] = utils_render_text(rend, self->lines[i], self->font, self->color);
+
+    return textures;
 }
 

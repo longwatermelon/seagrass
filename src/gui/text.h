@@ -8,10 +8,9 @@ struct Text
 {
     SDL_Point pos;
 
-    const char* contents;
-
+    char** lines;
     SDL_Texture** textures;
-    int ntextures;
+    int nlines;
 
     TTF_Font* font;
     SDL_Point char_dim;
@@ -23,8 +22,12 @@ void text_free(struct Text* self);
 
 void text_render(struct Text* self, SDL_Renderer* rend);
 
-static SDL_Texture** text_split_str_into_textures(struct Text* self, SDL_Renderer* rend, int* count);
-static SDL_Texture* text_render_text(struct Text* self, SDL_Renderer* rend, const char* text);
+void text_redo_textures(struct Text* self, SDL_Renderer* rend);
+void text_redo_texture(struct Text* self, SDL_Renderer* rend, int index, const char* text);
+void text_insert_texture(struct Text* self, SDL_Renderer* rend, int index, const char* text);
+
+// Split up regular string by \n into multiple textures
+static SDL_Texture** text_split_str_into_textures(struct Text* self, SDL_Renderer* rend);
 
 #endif
 

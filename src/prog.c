@@ -32,7 +32,8 @@ void prog_mainloop(struct Prog* self)
 {
     SDL_Event evt;
 
-    struct Text* t = text_alloc(self->rend, (SDL_Point){ 100, 100 }, "lawlwla\nowo", self->font, (SDL_Color){ 255, 255, 255 });
+    struct Text* t = text_alloc(self->rend, (SDL_Point){ 100, 100 }, "ccccc\nddddd", self->font, (SDL_Color){ 255, 255, 255 });
+    text_insert_texture(t, self->rend, 1, "aaaaaaaaa");
 
     while (self->running)
     {
