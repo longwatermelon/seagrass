@@ -3,6 +3,8 @@
 #include "gui/textbox.h"
 #include "gui/utils.h"
 
+bool g_mouse_down = false;
+
 
 void events_base(struct Prog* p, SDL_Event* evt)
 {
@@ -23,9 +25,24 @@ void events_base(struct Prog* p, SDL_Event* evt)
         case SDL_MOUSEBUTTONDOWN:
             events_mouse(p, evt);
             break;
+        case SDL_MOUSEBUTTONUP:
+            events_mouse_release(p, evt);
+            break;
         case SDL_MOUSEWHEEL:
             events_mousewheel(p, evt);
             break;
+        }
+    }
+
+    if (g_mouse_down)
+    {
+        if (p->selected_textbox)
+        {
+            int mx, my;
+            SDL_GetMouseState(&mx, &my);
+
+            textbox_cursor_follow_mouse(p->selected_textbox, mx, my);
+            p->selected_textbox->highlight_end = p->selected_textbox->cursor_pos;
         }
     }
 }
@@ -77,6 +94,8 @@ void events_mouse(struct Prog* p, SDL_Event* evt)
 
 void events_mouse_left(struct Prog* p, SDL_Event* evt)
 {
+    g_mouse_down = true;
+
     SDL_Point mouse;
     SDL_GetMouseState(&mouse.x, &mouse.y);
 
@@ -87,26 +106,36 @@ void events_mouse_left(struct Prog* p, SDL_Event* evt)
 
     if (p->selected_textbox)
     {
-        SDL_Point rel = {
-            .x = mouse.x - p->selected_textbox->rect.x,
-            .y = mouse.y - p->selected_textbox->rect.y
-        };
+        p->selected_textbox->highlighting = true;
 
-        SDL_Point dst = {
-            .x = (rel.x - (rel.x % p->selected_textbox->text->char_dim.x)) / p->selected_textbox->text->char_dim.x + p->selected_textbox->view_pos.x,
-            .y = (rel.y - (rel.y % p->selected_textbox->text->char_dim.y)) / p->selected_textbox->text->char_dim.y + p->selected_textbox->view_pos.y
-        };
+        int mx, my;
+        SDL_GetMouseState(&mx, &my);
 
-        textbox_move_cursor(p->selected_textbox,
-            dst.x - p->selected_textbox->cursor_pos.x,
-            dst.y - p->selected_textbox->cursor_pos.y
-        );
+        textbox_cursor_follow_mouse(p->selected_textbox, mx, my);
+        p->selected_textbox->highlight_begin = p->selected_textbox->cursor_pos;
     }
 }
 
 
 void events_mouse_right(struct Prog* p, SDL_Event* evt)
 {
+}
+
+
+void events_mouse_release(struct Prog* p, SDL_Event* evt)
+{
+    g_mouse_down = false;
+
+    if (p->selected_textbox)
+    {
+        if (p->selected_textbox->highlight_begin.x == p->selected_textbox->highlight_end.x &&
+            p->selected_textbox->highlight_begin.y == p->selected_textbox->highlight_end.y)
+        {
+            p->selected_textbox->highlighting = false;
+            p->selected_textbox->highlight_begin = (SDL_Point){ .x = 0, .y = 0 };
+            p->selected_textbox->highlight_end = (SDL_Point){ .x = 0, .y = 0 };
+        }
+    }
 }
 
 

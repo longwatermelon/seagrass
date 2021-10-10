@@ -62,5 +62,6 @@ void prog_mainloop(struct Prog* self)
 void prog_render(struct Prog* self)
 {
     textbox_render(self->main_textbox, self->rend);
+    textbox_render_highlight(self->main_textbox, self->rend);
 }
 

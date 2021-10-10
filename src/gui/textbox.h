@@ -2,6 +2,7 @@
 #define TEXTBOX_H
 
 #include "text.h"
+#include <stdbool.h>
 
 struct Textbox
 {
@@ -14,17 +15,26 @@ struct Textbox
 
     // Measured in characters
     SDL_Point view_pos;
+
+    bool highlighting;
+    // Measured in chars
+    SDL_Point highlight_begin, highlight_end;
 };
 
 struct Textbox* textbox_alloc(SDL_Rect rect, SDL_Renderer* rend, TTF_Font* font, SDL_Color color);
 void textbox_free(struct Textbox* self);
 
 void textbox_render(struct Textbox* self, SDL_Renderer* rend);
+// Render highlighted sections
+void textbox_render_highlight(struct Textbox* self, SDL_Renderer* rend);
+// Highlight a line from index begin to end at index.
+void textbox_render_highlight_line(struct Textbox* self, SDL_Renderer* rend, int index, int begin, int end);
 
 void textbox_move_cursor(struct Textbox* self, int x, int y);
-
 // Jump to end of line if cursor is in an illegal position
 void textbox_cond_jump_to_eol(struct Textbox* self);
+// Move cursor to mouse position
+void textbox_cursor_follow_mouse(struct Textbox* self, int mx, int my);
 
 // Adds character where cursor currently is
 void textbox_add_char(struct Textbox* self, SDL_Renderer* rend, char c);

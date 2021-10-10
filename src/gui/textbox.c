@@ -11,8 +11,11 @@ struct Textbox* textbox_alloc(SDL_Rect rect, SDL_Renderer* rend, TTF_Font* font,
     self->bg_color = color;
 
     self->cursor_pos = (SDL_Point){ .x = 0, .y = 0 };
-
     self->view_pos = (SDL_Point){ .x = 0, .y = 0 };
+
+    self->highlighting = false;
+    self->highlight_begin = (SDL_Point){ 0, 0 };
+    self->highlight_end = (SDL_Point){ 0, 0 };
 
     return self;
 }
@@ -47,6 +50,49 @@ void textbox_render(struct Textbox* self, SDL_Renderer* rend)
 }
 
 
+void textbox_render_highlight(struct Textbox* self, SDL_Renderer* rend)
+{
+    if (self->highlighting)
+    {
+        if (self->highlight_begin.y == self->highlight_end.y)
+        {
+            textbox_render_highlight_line(self, rend, self->highlight_begin.y, self->highlight_begin.x, self->highlight_end.x);
+        }
+        else
+        {
+            SDL_Point* top = (self->highlight_end.y < self->highlight_begin.y ? &self->highlight_end : &self->highlight_begin);
+            SDL_Point* bot = (self->highlight_end.y < self->highlight_begin.y ? &self->highlight_begin : &self->highlight_end);
+
+            textbox_render_highlight_line(self, rend, top->y, top->x, strlen(self->text->lines[top->y]));
+            textbox_render_highlight_line(self, rend, bot->y, 0, bot->x);
+
+            for (int i = top->y + 1; i < bot->y; ++i)
+                textbox_render_highlight_line(self, rend, i, 0, strlen(self->text->lines[i]));
+        }
+    }
+}
+
+
+void textbox_render_highlight_line(struct Textbox* self, SDL_Renderer* rend, int index, int begin, int end)
+{
+    int y = self->rect.y + (index - self->view_pos.y) * self->text->char_dim.y;
+
+    int x1 = self->rect.x + (begin - self->view_pos.x) * self->text->char_dim.x;
+    int x2 = self->rect.x + (end - self->view_pos.x) * self->text->char_dim.x;
+
+    SDL_Rect rect = {
+        .x = x1,
+        .y = y,
+        .w = x2 - x1,
+        .h = self->text->char_dim.y
+    };
+
+    SDL_SetRenderDrawBlendMode(rend, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(rend, 203, 241, 244, 100);
+    SDL_RenderFillRect(rend, &rect);
+    SDL_SetRenderDrawBlendMode(rend, SDL_BLENDMODE_NONE);
+}
+
 
 void textbox_move_cursor(struct Textbox* self, int x, int y)
 {
@@ -75,6 +121,25 @@ void textbox_cond_jump_to_eol(struct Textbox* self)
         self->cursor_pos.x = strlen(self->text->lines[self->cursor_pos.y]);
         textbox_move_view_cursor(self);
     }
+}
+
+
+void textbox_cursor_follow_mouse(struct Textbox* self, int mx, int my)
+{
+    SDL_Point rel = {
+        .x = mx - self->rect.x,
+        .y = my - self->rect.y
+    };
+
+    SDL_Point dst = {
+        .x = (rel.x - (rel.x % self->text->char_dim.x)) / self->text->char_dim.x + self->view_pos.x,
+        .y = (rel.y - (rel.y % self->text->char_dim.y)) / self->text->char_dim.y + self->view_pos.y
+    };
+
+    textbox_move_cursor(self,
+        dst.x - self->cursor_pos.x,
+        dst.y - self->cursor_pos.y
+    );
 }
 
 
