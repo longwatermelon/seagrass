@@ -185,7 +185,7 @@ void textbox_del_char(struct Textbox* self, SDL_Renderer* rend)
 {
     if (self->highlighting)
     {
-        textbox_delete_highlighted(self, rend);
+        textbox_del_highlighted(self, rend);
         return;
     }
 
@@ -275,14 +275,14 @@ void textbox_move_view_cursor(struct Textbox* self)
 }
 
 
-void textbox_delete_highlighted(struct Textbox* self, SDL_Renderer* rend)
+void textbox_del_highlighted(struct Textbox* self, SDL_Renderer* rend)
 {
     if (self->highlight_end.y == self->highlight_begin.y)
     {
         int left = self->highlight_begin.x < self->highlight_end.x ? self->highlight_begin.x : self->highlight_end.x;
         int right = self->highlight_begin.x > self->highlight_end.x ? self->highlight_begin.x : self->highlight_end.x;
 
-        textbox_delete_highlighted_line(self, rend, self->highlight_begin.y, left, right);
+        textbox_del_highlighted_line(self, rend, self->highlight_begin.y, left, right);
         self->highlighting = false;
         textbox_move_cursor(self, left - self->cursor_pos.x, 0);
     }
@@ -291,8 +291,8 @@ void textbox_delete_highlighted(struct Textbox* self, SDL_Renderer* rend)
         SDL_Point* top = (self->highlight_end.y < self->highlight_begin.y ? &self->highlight_end : &self->highlight_begin);
         SDL_Point* bot = (self->highlight_end.y < self->highlight_begin.y ? &self->highlight_begin : &self->highlight_end);
 
-        textbox_delete_highlighted_line(self, rend, top->y, top->x, strlen(self->text->lines[top->y]));
-        textbox_delete_highlighted_line(self, rend, bot->y, 0, bot->x);
+        textbox_del_highlighted_line(self, rend, top->y, top->x, strlen(self->text->lines[top->y]));
+        textbox_del_highlighted_line(self, rend, bot->y, 0, bot->x);
 
         for (int i = top->y + 1; i < bot->y; ++i)
             text_remove_texture(self->text, rend, top->y + 1);
@@ -314,7 +314,7 @@ void textbox_delete_highlighted(struct Textbox* self, SDL_Renderer* rend)
 }
 
 
-void textbox_delete_highlighted_line(struct Textbox* self, SDL_Renderer* rend, int index, int begin, int end)
+void textbox_del_highlighted_line(struct Textbox* self, SDL_Renderer* rend, int index, int begin, int end)
 {
     char* line = self->text->lines[index];
 
