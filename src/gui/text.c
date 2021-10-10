@@ -73,6 +73,10 @@ void text_redo_texture(struct Text* self, SDL_Renderer* rend, int index, const c
         SDL_DestroyTexture(self->textures[index]);
 
     self->textures[index] = utils_render_text(rend, text, self->font, self->color);
+
+    self->lines[index] = malloc(sizeof(char) * (strlen(text) + 1));
+    memcpy(self->lines[index], text, strlen(text));
+    self->lines[index][strlen(text)] = '\0';
 }
 
 

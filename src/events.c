@@ -12,8 +12,13 @@ void events_base(struct Prog* p, SDL_Event* evt)
         case SDL_QUIT:
             p->running = false;
             break;
+        case SDL_TEXTINPUT:
+            if (p->selected_textbox)
+                textbox_add_char(p->selected_textbox, p->rend, evt->text.text[0]);
+            break;
         case SDL_KEYDOWN:
             events_keydown(p, evt);
+            break;
         }
     }
 }
