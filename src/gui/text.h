@@ -29,6 +29,7 @@ void text_redo_textures(struct Text* self, SDL_Renderer* rend);
 // Redo and insert only copy the contents of text, not the pointer itself. Free the string passed in if it's dynamically allocated.
 void text_redo_texture(struct Text* self, SDL_Renderer* rend, int index, const char* text);
 void text_insert_texture(struct Text* self, SDL_Renderer* rend, int index, const char* text);
+void text_remove_texture(struct Text* self, SDL_Renderer* rend, int index);
 
 // Split up regular string by \n into multiple textures
 static SDL_Texture** text_split_str_into_textures(struct Text* self, SDL_Renderer* rend);

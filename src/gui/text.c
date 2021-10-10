@@ -130,6 +130,29 @@ void text_insert_texture(struct Text* self, SDL_Renderer* rend, int index, const
 }
 
 
+void text_remove_texture(struct Text* self, SDL_Renderer* rend, int index)
+{
+    free(self->lines[index]);
+
+    memcpy(&self->lines[index],
+           &self->lines[index + 1],
+           sizeof(char*) * (self->nlines - index - 1));
+
+    self->lines = realloc(self->lines, sizeof(char*) * (self->nlines - 1));
+
+    if (self->textures[index])
+        SDL_DestroyTexture(self->textures[index]);
+
+    memcpy(&self->textures[index],
+           &self->textures[index + 1],
+           sizeof(SDL_Texture*) * (self->nlines - index - 1));
+
+    self->textures = realloc(self->textures, sizeof(SDL_Texture*) * (self->nlines - 1));
+
+    --self->nlines;
+}
+
+
 static SDL_Texture** text_split_str_into_textures(struct Text* self, SDL_Renderer* rend)
 {
     SDL_Texture** textures = malloc(sizeof(SDL_Texture*) * self->nlines);
