@@ -1,7 +1,6 @@
 #ifndef PROG_H
 #define PROG_H
 
-#include "frontend.h"
 #include <stdbool.h>
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -13,13 +12,17 @@ struct Prog
     SDL_Window* window;
     SDL_Renderer* rend;
 
-    struct Frontend* frontend;
+    TTF_Font* font;
+
+    struct Textbox* main_textbox;
+    struct Textbox* selected_textbox;
 };
 
 struct Prog* prog_alloc();
 void prog_free(struct Prog* self);
 
 void prog_mainloop(struct Prog* self);
+void prog_render(struct Prog* self);
 
 #endif
 

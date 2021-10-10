@@ -11,8 +11,6 @@ add_executable(seagrass
     src/prog.c
     src/events.h
     src/events.c
-    src/frontend.h
-    src/frontend.c
 )
 
 target_compile_options(seagrass PRIVATE -ggdb)
