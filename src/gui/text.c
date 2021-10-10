@@ -39,6 +39,9 @@ void text_render(struct Text* self, SDL_Renderer* rend)
 {
     for (int i = 0; i < self->nlines; ++i)
     {
+        if (!self->textures[i])
+            continue;
+
         SDL_Rect dst = {
             .x = self->pos.x,
             .y = self->pos.y + i * self->char_dim.y

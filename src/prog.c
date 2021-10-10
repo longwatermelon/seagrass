@@ -1,6 +1,7 @@
 #include "prog.h"
 #include "events.h"
 #include "gui/text.h"
+#include "gui/textbox.h"
 
 
 struct Prog* prog_alloc()
@@ -32,8 +33,10 @@ void prog_mainloop(struct Prog* self)
 {
     SDL_Event evt;
 
-    struct Text* t = text_alloc(self->rend, (SDL_Point){ 100, 100 }, "ccccc\nddddd", self->font, (SDL_Color){ 255, 255, 255 });
-    text_insert_texture(t, self->rend, 1, "aaaaaaaaa");
+    /* struct Text* t = text_alloc(self->rend, (SDL_Point){ 100, 100 }, "ccccc\nddddd", self->font, (SDL_Color){ 255, 255, 255 }); */
+    /* text_insert_texture(t, self->rend, 1, "aaaaaaaaa"); */
+
+    struct Textbox* t = textbox_alloc((SDL_Point){ 100, 100 }, self->rend, self->font);
 
     while (self->running)
     {
@@ -41,12 +44,12 @@ void prog_mainloop(struct Prog* self)
 
         SDL_RenderClear(self->rend);
 
-        text_render(t, self->rend);
+        textbox_render(t, self->rend);
 
         SDL_SetRenderDrawColor(self->rend, 0, 0, 0, 255);
         SDL_RenderPresent(self->rend);
     }
 
-    text_free(t);
+    textbox_free(t);
 }
 

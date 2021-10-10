@@ -9,6 +9,8 @@ add_library(gui
     text.c
     utils.h
     utils.c
+    textbox.h
+    textbox.c
 )
 
 target_compile_options(gui PRIVATE -ggdb)
