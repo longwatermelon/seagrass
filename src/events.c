@@ -26,24 +26,32 @@ void events_base(struct Prog* p, SDL_Event* evt)
 
 void events_keydown(struct Prog* p, SDL_Event* evt)
 {
-    switch (evt->key.keysym.sym)
+    if (p->selected_textbox)
     {
-    case SDLK_RIGHT:
-        if (p->selected_textbox)
+        switch (evt->key.keysym.sym)
+        {
+        case SDLK_RIGHT:
             textbox_move_cursor(p->selected_textbox, 1, 0);
-        break;
-    case SDLK_LEFT:
-        if (p->selected_textbox)
+            break;
+        case SDLK_LEFT:
             textbox_move_cursor(p->selected_textbox, -1, 0);
-        break;
-    case SDLK_UP:
-        if (p->selected_textbox)
+            break;
+        case SDLK_UP:
             textbox_move_cursor(p->selected_textbox, 0, -1);
-        break;
-    case SDLK_DOWN:
-        if (p->selected_textbox)
+            break;
+        case SDLK_DOWN:
             textbox_move_cursor(p->selected_textbox, 0, 1);
-        break;
+            break;
+        }
+
+        switch (evt->key.keysym.scancode)
+        {
+        case SDL_SCANCODE_RETURN:
+            textbox_add_nl(p->selected_textbox, p->rend);
+            break;
+        default:
+            break;
+        }
     }
 }
 

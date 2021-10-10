@@ -25,6 +25,8 @@ void textbox_cond_jump_to_eol(struct Textbox* self);
 
 // Adds character where cursor currently is
 void textbox_add_char(struct Textbox* self, SDL_Renderer* rend, char c);
+// Add new line
+void textbox_add_nl(struct Textbox* self, SDL_Renderer* rend);
 
 // Converts character coordinates (row, col) to pixel coordinates
 static SDL_Point textbox_char_to_pix_pos(struct Textbox* self, SDL_Point pos);

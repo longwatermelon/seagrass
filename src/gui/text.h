@@ -23,6 +23,8 @@ void text_free(struct Text* self);
 void text_render(struct Text* self, SDL_Renderer* rend);
 
 void text_redo_textures(struct Text* self, SDL_Renderer* rend);
+
+// Redo and insert only copy the contents of text, not the pointer itself. Free the string passed in if it's dynamically allocated.
 void text_redo_texture(struct Text* self, SDL_Renderer* rend, int index, const char* text);
 void text_insert_texture(struct Text* self, SDL_Renderer* rend, int index, const char* text);
 

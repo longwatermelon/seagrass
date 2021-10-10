@@ -74,7 +74,31 @@ void textbox_add_char(struct Textbox* self, SDL_Renderer* rend, char c)
     curr_line[self->cursor_pos.x] = c;
 
     text_redo_texture(self->text, rend, self->cursor_pos.y, curr_line);
+    free(curr_line);
     textbox_move_cursor(self, 1, 0);
+}
+
+
+void textbox_add_nl(struct Textbox* self, SDL_Renderer* rend)
+{
+    char* line = self->text->lines[self->cursor_pos.y];
+
+    int len = strlen(line) - self->cursor_pos.x;
+    char* copied = malloc(sizeof(char) * (len + 1));
+    memcpy(copied, &line[self->cursor_pos.x], len);
+    copied[len] = '\0';
+    text_insert_texture(self->text, rend, self->cursor_pos.y + 1, copied);
+    free(copied);
+
+    char* new_line = malloc(sizeof(char) * (self->cursor_pos.x + 1));
+    memcpy(new_line, line, self->cursor_pos.x);
+    new_line[self->cursor_pos.x] = '\0';
+    free(line);
+    text_redo_texture(self->text, rend, self->cursor_pos.y, new_line);
+    free(new_line);
+
+    textbox_move_cursor(self, 0, 1);
+    self->cursor_pos.x = 0;
 }
 
 

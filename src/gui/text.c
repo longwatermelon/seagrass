@@ -83,12 +83,22 @@ void text_redo_texture(struct Text* self, SDL_Renderer* rend, int index, const c
 void text_insert_texture(struct Text* self, SDL_Renderer* rend, int index, const char* text)
 {
     self->lines = realloc(self->lines, sizeof(char*) * (self->nlines + 1));
-    memcpy(&self->lines[index + 1], &self->lines[index], sizeof(char*) * (self->nlines - index));
-    self->lines[index] = malloc(sizeof(char) * strlen(text));
+
+    memcpy(&self->lines[index + 1],
+           &self->lines[index],
+           sizeof(char*) * (self->nlines - index));
+
+    self->lines[index] = malloc(sizeof(char) * (strlen(text) + 1));
     memcpy(self->lines[index], text, sizeof(char) * strlen(text));
+    self->lines[index][strlen(text)] = '\0';
+
 
     self->textures = realloc(self->textures, sizeof(SDL_Texture*) * (self->nlines + 1));
-    memcpy(&self->textures[index + 1], &self->textures[index], sizeof(SDL_Texture*) * (self->nlines - index));
+
+    memcpy(&self->textures[index + 1],
+           &self->textures[index],
+           sizeof(SDL_Texture*) * (self->nlines - index));
+
     self->textures[index] = utils_render_text(rend, text, self->font, self->color);
 
     ++self->nlines;
