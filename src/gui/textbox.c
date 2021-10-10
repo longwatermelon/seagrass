@@ -1,4 +1,5 @@
 #include "textbox.h"
+#include "utils.h"
 
 
 struct Textbox* textbox_alloc(SDL_Rect rect, SDL_Renderer* rend, TTF_Font* font, SDL_Color color)
@@ -83,19 +84,14 @@ void textbox_add_nl(struct Textbox* self, SDL_Renderer* rend)
 {
     char* line = self->text->lines[self->cursor_pos.y];
 
-    int len = strlen(line) - self->cursor_pos.x;
-    char* copied = malloc(sizeof(char) * (len + 1));
-    memcpy(copied, &line[self->cursor_pos.x], len);
-    copied[len] = '\0';
+    char* copied = utils_substr(line, self->cursor_pos.x, strlen(line));
     text_insert_texture(self->text, rend, self->cursor_pos.y + 1, copied);
     free(copied);
 
-    char* new_line = malloc(sizeof(char) * (self->cursor_pos.x + 1));
-    memcpy(new_line, line, self->cursor_pos.x);
-    new_line[self->cursor_pos.x] = '\0';
-    free(line);
+    char* new_line = utils_substr(line, 0, self->cursor_pos.x);
     text_redo_texture(self->text, rend, self->cursor_pos.y, new_line);
     free(new_line);
+    free(line);
 
     textbox_move_cursor(self, 0, 1);
     self->cursor_pos.x = 0;
