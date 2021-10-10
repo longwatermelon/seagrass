@@ -20,8 +20,9 @@ struct Text
 struct Text* text_alloc(SDL_Renderer* rend, SDL_Point pos, const char* contents, TTF_Font* font, SDL_Color color);
 void text_free(struct Text* self);
 
-// view_pos measured in chars
-void text_render(struct Text* self, SDL_Renderer* rend, SDL_Point view_pos);
+// view_pos measured in chars; pass in (0, 0) if not applicable
+// enclosing_rect: pass in 0 if not applicable
+void text_render(struct Text* self, SDL_Renderer* rend, SDL_Point view_pos, SDL_Rect* enclosing_rect);
 
 void text_redo_textures(struct Text* self, SDL_Renderer* rend);
 

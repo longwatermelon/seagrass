@@ -30,7 +30,7 @@ void textbox_render(struct Textbox* self, SDL_Renderer* rend)
     SDL_SetRenderDrawColor(rend, self->bg_color.r, self->bg_color.g, self->bg_color.b, 255);
     SDL_RenderFillRect(rend, &self->rect);
 
-    text_render(self->text, rend, self->view_pos);
+    text_render(self->text, rend, self->view_pos, &self->rect);
 
     SDL_SetRenderDrawColor(rend, 255, 255, 255, 255);
     SDL_Point pos = textbox_char_to_pix_pos(self, self->cursor_pos);
@@ -108,8 +108,7 @@ void textbox_add_nl(struct Textbox* self, SDL_Renderer* rend)
     free(new_line);
     free(line);
 
-    textbox_move_cursor(self, 0, 1);
-    self->cursor_pos.x = 0;
+    textbox_move_cursor(self, -self->cursor_pos.x, 1);
 }
 
 

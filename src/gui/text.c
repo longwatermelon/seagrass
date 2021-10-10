@@ -35,7 +35,7 @@ void text_free(struct Text* self)
 }
 
 
-void text_render(struct Text* self, SDL_Renderer* rend, SDL_Point view_pos)
+void text_render(struct Text* self, SDL_Renderer* rend, SDL_Point view_pos, SDL_Rect* enclosing_rect)
 {
     SDL_Point pix_view_point = {
         .x = view_pos.x * self->char_dim.x,
@@ -52,7 +52,8 @@ void text_render(struct Text* self, SDL_Renderer* rend, SDL_Point view_pos)
             .y = self->pos.y + i * self->char_dim.y - pix_view_point.y
         };
 
-        if (dst.y < self->pos.y)
+        if (dst.y < self->pos.y ||
+            (enclosing_rect && dst.y > enclosing_rect->y + enclosing_rect->h))
             continue;
 
         SDL_QueryTexture(self->textures[i], 0, 0, &dst.w, &dst.h);
@@ -61,6 +62,16 @@ void text_render(struct Text* self, SDL_Renderer* rend, SDL_Point view_pos)
 
         src.w -= src.x;
         dst.w -= src.x;
+
+        if (enclosing_rect)
+        {
+            if (src.w > enclosing_rect->w)
+            {
+                int diff = src.w - enclosing_rect->w;
+                src.w -= diff;
+                dst.w -= diff;
+            }
+        }
 
         SDL_RenderCopy(rend, self->textures[i], &src, &dst);
     }
