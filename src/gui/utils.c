@@ -52,3 +52,10 @@ char** utils_split_str(const char* str, char delim, int* count)
     return list;
 }
 
+
+bool utils_p_in_rect(SDL_Point p, SDL_Rect rect)
+{
+    return p.x >= rect.x && p.x <= rect.x + rect.w &&
+           p.y >= rect.y && p.y <= rect.y + rect.h;
+}
+

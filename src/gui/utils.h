@@ -1,6 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+#include <stdbool.h>
 #include <SDL.h>
 #include <SDL_ttf.h>
 
@@ -8,6 +9,8 @@ SDL_Texture* utils_render_text(SDL_Renderer* rend, const char* text, TTF_Font* f
 
 char* utils_substr(const char* str, int start, int end);
 char** utils_split_str(const char* str, char delim, int* count);
+
+bool utils_p_in_rect(SDL_Point p, SDL_Rect rect);
 
 #endif
 
