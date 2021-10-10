@@ -19,6 +19,9 @@ void events_base(struct Prog* p, SDL_Event* evt)
         case SDL_KEYDOWN:
             events_keydown(p, evt);
             break;
+        case SDL_MOUSEWHEEL:
+            events_mousewheel(p, evt);
+            break;
         }
     }
 }
@@ -55,6 +58,15 @@ void events_keydown(struct Prog* p, SDL_Event* evt)
         default:
             break;
         }
+    }
+}
+
+
+void events_mousewheel(struct Prog* p, SDL_Event* evt)
+{
+    if (p->selected_textbox)
+    {
+        textbox_move_view(p->selected_textbox, 0, -evt->wheel.y);
     }
 }
 

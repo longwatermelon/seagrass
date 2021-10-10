@@ -169,6 +169,9 @@ void textbox_move_view(struct Textbox* self, int x, int y)
 
     if (self->view_pos.y < 0)
         self->view_pos.y = 0;
+
+    if (self->view_pos.y >= self->text->nlines)
+        self->view_pos.y = self->text->nlines - 1;
 }
 
 
