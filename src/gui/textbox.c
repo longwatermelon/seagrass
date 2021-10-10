@@ -79,6 +79,9 @@ void textbox_render_highlight(struct Textbox* self, SDL_Renderer* rend)
 void textbox_render_highlight_line(struct Textbox* self, SDL_Renderer* rend, int index, int begin, int end)
 {
     int y = self->rect.y + (index - self->view_pos.y) * self->text->char_dim.y;
+    
+    if (y < self->rect.y)
+        return;
 
     int x1 = self->rect.x + (begin - self->view_pos.x) * self->text->char_dim.x;
     int x2 = self->rect.x + (end - self->view_pos.x) * self->text->char_dim.x;
@@ -89,6 +92,13 @@ void textbox_render_highlight_line(struct Textbox* self, SDL_Renderer* rend, int
         .w = x2 - x1,
         .h = self->text->char_dim.y
     };
+
+    if (rect.x < self->rect.x)
+    {
+        int diff = self->rect.x - rect.x;
+        rect.x += diff;
+        rect.w -= diff;
+    }
 
     SDL_SetRenderDrawBlendMode(rend, SDL_BLENDMODE_BLEND);
     SDL_SetRenderDrawColor(rend, 203, 241, 244, 100);
