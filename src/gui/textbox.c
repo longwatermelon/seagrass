@@ -183,6 +183,12 @@ void textbox_add_nl(struct Textbox* self, SDL_Renderer* rend)
 
 void textbox_del_char(struct Textbox* self, SDL_Renderer* rend)
 {
+    if (self->highlighting)
+    {
+        textbox_delete_highlighted(self, rend);
+        return;
+    }
+
     if (self->cursor_pos.x == 0)
     {
         textbox_del_nl(self, rend);
@@ -266,6 +272,39 @@ void textbox_move_view_cursor(struct Textbox* self)
         moved.y = self->cursor_pos.y - (self->view_pos.y + char_size.y) + 6;
 
     textbox_move_view(self, moved.x, moved.y);
+}
+
+
+void textbox_delete_highlighted(struct Textbox* self, SDL_Renderer* rend)
+{
+    if (self->highlight_end.y == self->highlight_begin.y)
+    {
+        char* line = self->text->lines[self->highlight_begin.y];
+        int left = self->highlight_begin.x < self->highlight_end.x ? self->highlight_begin.x : self->highlight_end.x;
+        int right = self->highlight_begin.x > self->highlight_end.x ? self->highlight_begin.x : self->highlight_end.x;
+
+        int len = strlen(line) - (right - left);
+
+        memcpy(&line[left], &line[right], strlen(line) - right);
+        line[len] = '\0';
+        line = realloc(line, sizeof(char) * (len + 1));
+
+        text_redo_texture(self->text, rend, self->highlight_begin.y, line);
+        free(line);
+
+        self->highlighting = false;
+        textbox_move_cursor(self, left - self->cursor_pos.x, 0);
+    }
+    /* SDL_Point* top = (self->highlight_end.y < self->highlight_begin.y ? &self->highlight_end : &self->highlight_begin); */
+    /* SDL_Point* bot = (self->highlight_end.y < self->highlight_begin.y ? &self->highlight_begin : &self->highlight_end); */
+
+    /* char* top_line = self->text->lines[top->y]; */
+    /* char* bot_line = self->text->lines[bot->y]; */
+
+    /* top_line = realloc(top_line, sizeof(char) * (top->x + 1)); */
+    /* top_line[top->x] = '\0'; */
+    /* text_redo_texture(self->text, rend, top->y, top_line); */
+    /* free(top_line); */
 }
 
 

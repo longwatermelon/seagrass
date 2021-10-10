@@ -50,6 +50,9 @@ void textbox_move_view(struct Textbox* self, int x, int y);
 // Move view_pos to cursor if necessary
 void textbox_move_view_cursor(struct Textbox* self);
 
+// Deletes all currently highlighted lines.
+void textbox_delete_highlighted(struct Textbox* self, SDL_Renderer* rend);
+
 // Converts character coordinates (row, col) to pixel coordinates
 static SDL_Point textbox_char_to_pix_pos(struct Textbox* self, SDL_Point pos);
 
