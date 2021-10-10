@@ -112,6 +112,36 @@ void textbox_add_nl(struct Textbox* self, SDL_Renderer* rend)
 }
 
 
+void textbox_del_char(struct Textbox* self, SDL_Renderer* rend)
+{
+    if (self->cursor_pos.x == 0)
+    {
+        textbox_del_nl(self, rend);
+    }
+    else
+    {
+        char* line = self->text->lines[self->cursor_pos.y];
+        memcpy(&line[self->cursor_pos.x - 1],
+               &line[self->cursor_pos.x],
+               sizeof(char) * (strlen(line) - self->cursor_pos.x));
+
+        int len = strlen(line) - 1;
+        line = realloc(line, sizeof(char) * (len + 1));
+        line[len] = '\0';
+
+        text_redo_texture(self->text, rend, self->cursor_pos.y, line);
+        textbox_move_cursor(self, -1, 0);
+
+        free(line);
+    }
+}
+
+
+void textbox_del_nl(struct Textbox* self, SDL_Renderer* rend)
+{
+}
+
+
 void textbox_move_view(struct Textbox* self, int x, int y)
 {
     self->view_pos.x += x;

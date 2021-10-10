@@ -30,6 +30,10 @@ void textbox_cond_jump_to_eol(struct Textbox* self);
 void textbox_add_char(struct Textbox* self, SDL_Renderer* rend, char c);
 // Add new line
 void textbox_add_nl(struct Textbox* self, SDL_Renderer* rend);
+// Backspace on the current character
+void textbox_del_char(struct Textbox* self, SDL_Renderer* rend);
+// Remove an entire line
+void textbox_del_nl(struct Textbox* self, SDL_Renderer* rend);
 
 // Move the view by (x, y) characters
 void textbox_move_view(struct Textbox* self, int x, int y);

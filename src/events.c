@@ -49,6 +49,9 @@ void events_keydown(struct Prog* p, SDL_Event* evt)
         case SDL_SCANCODE_RETURN:
             textbox_add_nl(p->selected_textbox, p->rend);
             break;
+        case SDL_SCANCODE_BACKSPACE:
+            textbox_del_char(p->selected_textbox, p->rend);
+            break;
         default:
             break;
         }
