@@ -42,7 +42,8 @@ void textbox_render(struct Textbox* self, SDL_Renderer* rend)
         .h = self->text->char_dim.y
     };
 
-    SDL_RenderFillRect(rend, &cursor);
+    if (cursor.y >= self->rect.y)
+        SDL_RenderFillRect(rend, &cursor);
 }
 
 
