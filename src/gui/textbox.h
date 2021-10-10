@@ -5,14 +5,21 @@
 
 struct Textbox
 {
-    SDL_Point pos;
+    SDL_Rect rect;
     struct Text* text;
+    SDL_Color bg_color;
+
+    // Measured as position in characters
+    SDL_Point cursor_pos;
 };
 
-struct Textbox* textbox_alloc(SDL_Point pos, SDL_Renderer* rend, TTF_Font* font);
+struct Textbox* textbox_alloc(SDL_Rect rect, SDL_Renderer* rend, TTF_Font* font, SDL_Color color);
 void textbox_free(struct Textbox* self);
 
 void textbox_render(struct Textbox* self, SDL_Renderer* rend);
+
+// Converts character coordinates (row, col) to pixel coordinates
+static SDL_Point textbox_char_to_pix_pos(struct Textbox* self, SDL_Point pos);
 
 #endif
 
