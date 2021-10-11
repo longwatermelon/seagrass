@@ -1,7 +1,7 @@
 #include "node.h"
 #include "fs.h"
 #include "tree.h"
-#include "../utils.h"
+#include "utils.h"
 #include <dirent.h>
 
 

@@ -2,7 +2,7 @@
 #define PROG_H
 
 #include "gui/scrollbar.h"
-#include "gui/tree/tree.h"
+#include "gui/tree.h"
 #include <stdbool.h>
 #include <SDL.h>
 #include <SDL_ttf.h>

@@ -1,5 +1,5 @@
 #include "tree.h"
-#include "../utils.h"
+#include "utils.h"
 #include <dirent.h>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
