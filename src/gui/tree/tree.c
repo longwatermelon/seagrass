@@ -38,3 +38,11 @@ void tree_render(struct Tree* self, SDL_Renderer* rend)
     node_render(self->root, rend, &start);
 }
 
+
+
+struct Node* tree_clicked(struct Tree* self, int mx, int my)
+{
+    SDL_Point start = (SDL_Point){ .x = self->pos.x, .y = self->pos.y - self->char_dim.y };
+    return node_find_rect(self->root, &start, my);
+}
+

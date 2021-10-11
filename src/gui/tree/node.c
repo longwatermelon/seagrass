@@ -37,17 +37,40 @@ void node_render(struct Node* self, SDL_Renderer* rend, SDL_Point* p)
 
     SDL_RenderCopy(rend, self->tex, 0, &rect);
     p->y += rect.h;
+    p->x += 10;
 
     for (int i = 0; i < self->node_num; ++i)
-    {
         node_render(self->nodes[i], rend, p);
-    }
+
+    p->x -= 10;
 }
 
 
 void node_read_subnodes(struct Node* self, SDL_Renderer* rend, TTF_Font* font)
 {
     self->nodes = node_read_dir_node(self, rend, font, self->name, &self->node_num);
+}
+
+
+struct Node* node_find_rect(struct Node* self, SDL_Point* start, int find_y)
+{
+    int h;
+    SDL_QueryTexture(self->tex, 0, 0, 0, &h);
+
+    if (find_y > start->y && find_y < start->y + h)
+        return self;
+
+    start->y += h;
+
+    for (int i = 0; i < self->node_num; ++i)
+    {
+        struct Node* n = node_find_rect(self->nodes[i], start, find_y);
+
+        if (n)
+            return n;
+    }
+
+    return 0;
 }
 
 

@@ -19,5 +19,7 @@ void tree_free(struct Tree* self);
 
 void tree_render(struct Tree* self, SDL_Renderer* rend);
 
+struct Node* tree_clicked(struct Tree* self, int mx, int my);
+
 #endif
 

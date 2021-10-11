@@ -125,6 +125,13 @@ void events_mouse_left(struct Prog* p, SDL_Event* evt)
         p->main_scrollbar->held = true;
         p->main_scrollbar->mouse_dist = mouse.y - p->main_scrollbar->rect.y;
     }
+
+    struct Node* clicked = tree_clicked(p->file_tree, mouse.x, mouse.y);
+
+    if (clicked)
+    {
+        node_read_subnodes(clicked, p->rend, p->file_tree->font);
+    }
 }
 
 
