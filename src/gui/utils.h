@@ -12,5 +12,7 @@ char** utils_split_str(const char* str, char delim, int* count);
 
 bool utils_p_in_rect(SDL_Point p, SDL_Rect rect);
 
+void utils_sort_alphabetically(char** arr, int len);
+
 #endif
 

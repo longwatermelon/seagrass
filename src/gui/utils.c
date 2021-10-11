@@ -59,3 +59,20 @@ bool utils_p_in_rect(SDL_Point p, SDL_Rect rect)
            p.y >= rect.y && p.y <= rect.y + rect.h;
 }
 
+
+void utils_sort_alphabetically(char** arr, int len)
+{
+    for (int i = 0; i < len; ++i)
+    {
+        for (int j = i + 1; j < len; ++j)
+        {
+            if (strcmp(arr[i], arr[j]) > 0)
+            {
+                char* tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
+            }
+        }
+    }
+}
+
