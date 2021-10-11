@@ -6,14 +6,14 @@
 
 struct Node
 {
-    char* name;
+    char* path;
     SDL_Texture* tex;
 
     struct Node** nodes;
     int node_num;
 };
 
-struct Node* node_alloc(SDL_Renderer* rend, TTF_Font* font, char* name);
+struct Node* node_alloc(SDL_Renderer* rend, TTF_Font* font, char* path);
 void node_free(struct Node* self);
 
 // Renders node at point p

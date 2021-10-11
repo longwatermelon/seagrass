@@ -1,13 +1,17 @@
 #include "node.h"
+#include "fs.h"
 #include "../utils.h"
 #include <dirent.h>
 
 
-struct Node* node_alloc(SDL_Renderer* rend, TTF_Font* font, char* name)
+struct Node* node_alloc(SDL_Renderer* rend, TTF_Font* font, char* path)
 {
     struct Node* self = malloc(sizeof(struct Node));
-    self->name = name;
+    self->path = path;
+
+    char* name = fs_filename(self->path);
     self->tex = utils_render_text(rend, name, font, (SDL_Color){ 255, 255, 255 });
+    free(name);
 
     self->nodes = malloc(0);
     self->node_num = 0;
@@ -24,7 +28,7 @@ void node_free(struct Node* self)
     free(self->nodes);
 
     SDL_DestroyTexture(self->tex);
-    free(self->name);
+    free(self->path);
 
     free(self);
 }
@@ -48,7 +52,7 @@ void node_render(struct Node* self, SDL_Renderer* rend, SDL_Point* p)
 
 void node_read_subnodes(struct Node* self, SDL_Renderer* rend, TTF_Font* font)
 {
-    self->nodes = node_read_dir_node(self, rend, font, self->name, &self->node_num);
+    self->nodes = node_read_dir_node(self, rend, font, self->path, &self->node_num);
 }
 
 
@@ -125,10 +129,9 @@ static char** node_read_dir_type(struct Node* self, const char* path, unsigned c
                 continue;
 
             items = realloc(items, sizeof(char*) * ++*count);
-            items[*count - 1] = malloc(sizeof(char) * (strlen(de->d_name) + 1));
+            items[*count - 1] = malloc(sizeof(char) * (strlen(path) + strlen(de->d_name) + 2));
 
-            memcpy(items[*count - 1], de->d_name, strlen(de->d_name));
-            items[*count - 1][strlen(de->d_name)] = '\0';
+            snprintf(items[*count - 1], strlen(path) + strlen(de->d_name) + 2, "%s/%s", path, de->d_name);
         }
     }
 

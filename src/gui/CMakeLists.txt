@@ -17,6 +17,8 @@ add_library(gui
     tree/tree.c
     tree/node.h
     tree/node.c
+    tree/fs.h
+    tree/fs.c
 )
 
 target_compile_options(gui PRIVATE -ggdb)
