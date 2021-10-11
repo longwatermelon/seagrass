@@ -36,7 +36,9 @@ void scrollbar_render(struct Scrollbar* self, SDL_Renderer* rend)
         .h = self->bar_len_units * self->px_per_unit
     };
 
-    SDL_SetRenderDrawColor(rend, 90, 90, 90, 255);
+    int col = 90 - (self->held ? 30 : 0);
+
+    SDL_SetRenderDrawColor(rend, col, col, col, 255);
     SDL_RenderFillRect(rend, &bar);
 }
 

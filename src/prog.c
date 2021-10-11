@@ -19,10 +19,12 @@ struct Prog* prog_alloc()
     SDL_GetWindowSize(self->window, &wx, &wy);
 
     self->main_textbox = textbox_alloc((SDL_Rect){ .x = 300, .y = 50, .w = wx - 300, .h = wy - 50 }, self->rend, self->font, (SDL_Color){ 30, 30, 30 });
-    self->main_scrollbar = scrollbar_alloc((SDL_Rect){ .x = wx - 20, .y = 100, .w = 20, .h = wy - 100 });
+    self->main_scrollbar = scrollbar_alloc((SDL_Rect){ .x = wx - 20, .y = 50, .w = 20, .h = wy - 50 });
     self->file_tree = tree_alloc((SDL_Point){ 0, 50 }, ".", self->rend);
 
     self->selected_textbox = 0;
+
+    self->opened_file[0] = '\0';
 
     return self;
 }
@@ -123,6 +125,9 @@ void prog_open_file(struct Prog* self, const char* fp)
 
 void prog_save_file(struct Prog* self)
 {
+    if (strlen(self->opened_file) == 0)
+        return;
+
     FILE* fp = fopen(self->opened_file, "w");
 
     char* out = textbox_get_text(self->main_textbox);
