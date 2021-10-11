@@ -129,6 +129,8 @@ void events_mouse_left(struct Prog* p, SDL_Event* evt)
 
     if (clicked && mouse.x < p->main_textbox->rect.x)
     {
+        p->file_tree->highlighted_y = mouse.y - (mouse.y % p->file_tree->char_dim.y);
+
         struct stat sb;
         stat(clicked->path, &sb);
 

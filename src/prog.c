@@ -61,9 +61,16 @@ void prog_mainloop(struct Prog* self)
 
 void prog_render(struct Prog* self)
 {
+    int mx, my;
+    SDL_GetMouseState(&mx, &my);
+
     SDL_RenderClear(self->rend);
 
-    tree_render(self->file_tree, self->rend);
+    int lowest_y = tree_render(self->file_tree, self->rend);
+
+    if (mx < self->main_textbox->rect.x)
+        tree_render_highlight(self->file_tree, self->rend, my, lowest_y);
+
     textbox_render(self->main_textbox, self->rend, self->main_textbox == self->selected_textbox);
     textbox_render_highlight(self->main_textbox, self->rend);
 
