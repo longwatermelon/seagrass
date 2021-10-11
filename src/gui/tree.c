@@ -48,8 +48,8 @@ void tree_free(struct Tree* self)
 int tree_render(struct Tree* self, SDL_Renderer* rend)
 {
     // SDL_Point* passed in will be modified so copy
-    SDL_Point start = (SDL_Point){ .x = self->pos.x + 20, .y = self->pos.y - self->char_dim.y };
-    node_render(self->root, rend, &start, self->textures, self->orig_pos.y - self->char_dim.y);
+    SDL_Point start = (SDL_Point){ .x = self->pos.x + 20, .y = self->pos.y };
+    node_render(self->root, rend, &start, self->textures, self->orig_pos.y);
 
     if (self->highlighted_y != -1)
     {
@@ -92,14 +92,14 @@ void tree_render_highlight(struct Tree* self, SDL_Renderer* rend, int my, int lo
 
 struct Node* tree_clicked(struct Tree* self, int mx, int my)
 {
-    SDL_Point start = (SDL_Point){ .x = self->pos.x, .y = self->pos.y - self->char_dim.y };
+    SDL_Point start = (SDL_Point){ .x = self->pos.x, .y = self->pos.y };
     return node_find_rect(self->root, &start, my);
 }
 
 
 void tree_scroll(struct Tree* self, int y, int win_h)
 {
-    int tmp = self->pos.y - self->char_dim.y;
+    int tmp = self->pos.y;
     node_lowest_y(self->root, &tmp);
 
     if (y < 0 && tmp < win_h)
