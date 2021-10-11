@@ -11,6 +11,8 @@ struct Scrollbar* scrollbar_alloc(SDL_Rect rect)
     self->bar_top_units = 0;
     self->px_per_unit = 0.f;
 
+    self->held = false;
+
     return self;
 }
 

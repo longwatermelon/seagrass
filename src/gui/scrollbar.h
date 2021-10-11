@@ -1,6 +1,7 @@
 #ifndef SCROLLBAR_H
 #define SCROLLBAR_H
 
+#include <stdbool.h>
 #include <SDL.h>
 
 struct Scrollbar
@@ -11,6 +12,9 @@ struct Scrollbar
     int bar_top_units, bar_len_units;
 
     float px_per_unit;
+
+    // Dragged by mouse
+    bool held;
 };
 
 struct Scrollbar* scrollbar_alloc(SDL_Rect rect);

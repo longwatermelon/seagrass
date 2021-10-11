@@ -50,7 +50,7 @@ void prog_mainloop(struct Prog* self)
         int wx, wy;
         SDL_GetWindowSize(self->window, &wx, &wy);
 
-        self->main_textbox->rect.w = wx - self->main_textbox->rect.x;
+        self->main_textbox->rect.w = wx - self->main_textbox->rect.x - 20;
         self->main_textbox->rect.h = wy - self->main_textbox->rect.y;
 
         self->main_scrollbar->rect.x = wx - self->main_scrollbar->rect.w;
@@ -59,6 +59,11 @@ void prog_mainloop(struct Prog* self)
         int rows = (self->main_textbox->rect.h - (self->main_textbox->rect.h % self->main_textbox->text->char_dim.y)) / self->main_textbox->text->char_dim.y;
 
         scrollbar_update(self->main_scrollbar, self->main_textbox->text->nlines + rows - 1, rows);
+
+        if (self->main_scrollbar->held)
+            self->main_textbox->view_pos.y = self->main_scrollbar->bar_top_units;
+        else
+            self->main_scrollbar->bar_top_units = self->main_textbox->view_pos.y;
 
         prog_render(self);
     }
