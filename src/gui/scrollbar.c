@@ -1,4 +1,5 @@
 #include "scrollbar.h"
+#include "utils.h"
 
 
 struct Scrollbar* scrollbar_alloc(SDL_Rect rect)
@@ -24,7 +25,7 @@ void scrollbar_free(struct Scrollbar* self)
 }
 
 
-void scrollbar_render(struct Scrollbar* self, SDL_Renderer* rend)
+void scrollbar_render(struct Scrollbar* self, SDL_Renderer* rend, int mx, int my)
 {
     SDL_SetRenderDrawColor(rend, 30, 30, 30, 255);
     SDL_RenderFillRect(rend, &self->rect);
@@ -36,7 +37,12 @@ void scrollbar_render(struct Scrollbar* self, SDL_Renderer* rend)
         .h = self->bar_len_units * self->px_per_unit
     };
 
-    int col = 90 - (self->held ? 30 : 0);
+    int col = 90;
+
+    if (self->held)
+        col -= 30;
+    else if (utils_p_in_rect((SDL_Point){ .x = mx, .y = my }, bar))
+        col += 30;
 
     SDL_SetRenderDrawColor(rend, col, col, col, 255);
     SDL_RenderFillRect(rend, &bar);
