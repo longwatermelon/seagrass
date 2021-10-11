@@ -24,7 +24,6 @@ void node_read_subnodes(struct Node* self, SDL_Renderer* rend, TTF_Font* font);
 struct Node* node_find_rect(struct Node* self, SDL_Point* start, int find_y);
 
 static struct Node** node_read_dir_node(struct Node* self, SDL_Renderer* rend, TTF_Font* font, const char* path, int* count);
-static char** node_read_dir_type(struct Node* self, const char* path, unsigned char type, int* count);
 
 #endif
 

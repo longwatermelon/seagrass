@@ -82,11 +82,11 @@ static struct Node** node_read_dir_node(struct Node* self, SDL_Renderer* rend, T
 {
     // Directories always go on top of files
     int ndirs;
-    char** dirs = node_read_dir_type(self, path, DT_DIR, &ndirs);
+    char** dirs = fs_read_dir(path, DT_DIR, &ndirs);
     utils_sort_alphabetically(dirs, ndirs);
 
     int nfiles;
-    char** files = node_read_dir_type(self, path, DT_REG, &nfiles);
+    char** files = fs_read_dir(path, DT_REG, &nfiles);
     utils_sort_alphabetically(files, nfiles);
 
     *count = nfiles + ndirs;
@@ -102,40 +102,5 @@ static struct Node** node_read_dir_node(struct Node* self, SDL_Renderer* rend, T
     free(dirs);
 
     return nodes;
-}
-
-
-static char** node_read_dir_type(struct Node* self, const char* path, unsigned char type, int* count)
-{
-    DIR* dir = opendir(path);
-
-    if (!dir)
-    {
-        fprintf(stderr, "Couldn't open directory %s\n", path);
-        return 0;
-    }
-
-    char** items = malloc(0);
-    *count = 0;
-
-    struct dirent* de;
-
-    while ((de = readdir(dir)) != 0)
-    {
-        if (de->d_type == type)
-        {
-            if (de->d_type == DT_DIR &&
-                (strcmp(de->d_name, ".") == 0 || strcmp(de->d_name, "..") == 0))
-                continue;
-
-            items = realloc(items, sizeof(char*) * ++*count);
-            items[*count - 1] = malloc(sizeof(char) * (strlen(path) + strlen(de->d_name) + 2));
-
-            snprintf(items[*count - 1], strlen(path) + strlen(de->d_name) + 2, "%s/%s", path, de->d_name);
-        }
-    }
-
-    closedir(dir);
-    return items;
 }
 
