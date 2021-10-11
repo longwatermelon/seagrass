@@ -18,9 +18,9 @@ struct Prog* prog_alloc()
     int wx, wy;
     SDL_GetWindowSize(self->window, &wx, &wy);
 
-    self->main_textbox = textbox_alloc((SDL_Rect){ .x = 300, .y = 100, .w = wx - 300, .h = wy - 100 }, self->rend, self->font, (SDL_Color){ 50, 50, 50 });
+    self->main_textbox = textbox_alloc((SDL_Rect){ .x = 300, .y = 50, .w = wx - 300, .h = wy - 50 }, self->rend, self->font, (SDL_Color){ 30, 30, 30 });
     self->main_scrollbar = scrollbar_alloc((SDL_Rect){ .x = wx - 20, .y = 100, .w = 20, .h = wy - 100 });
-    self->file_tree = tree_alloc((SDL_Point){ 0, 100 }, ".", self->rend);
+    self->file_tree = tree_alloc((SDL_Point){ 0, 50 }, ".", self->rend);
 
     self->selected_textbox = 0;
 
@@ -69,7 +69,7 @@ void prog_render(struct Prog* self)
 
     scrollbar_render(self->main_scrollbar, self->rend);
 
-    SDL_SetRenderDrawColor(self->rend, 20, 20, 20, 255);
+    SDL_SetRenderDrawColor(self->rend, 50, 50, 50, 255);
     SDL_RenderPresent(self->rend);
 }
 
