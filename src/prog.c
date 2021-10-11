@@ -12,7 +12,7 @@ struct Prog* prog_alloc()
     self->window = SDL_CreateWindow("Seagrass", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 900, 700, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     self->rend = SDL_CreateRenderer(self->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-    self->font = TTF_OpenFont("res/gfx/font.ttf", 16);
+    self->font = TTF_OpenFont("res/font.ttf", 16);
 
     int wx, wy;
     SDL_GetWindowSize(self->window, &wx, &wy);

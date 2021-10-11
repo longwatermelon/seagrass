@@ -104,7 +104,7 @@ void textbox_render_highlight_line(struct Textbox* self, SDL_Renderer* rend, int
     }
 
     SDL_SetRenderDrawBlendMode(rend, SDL_BLENDMODE_BLEND);
-    SDL_SetRenderDrawColor(rend, 203, 241, 244, 100);
+    SDL_SetRenderDrawColor(rend, 226, 198, 242, 100);
     SDL_RenderFillRect(rend, &rect);
     SDL_SetRenderDrawBlendMode(rend, SDL_BLENDMODE_NONE);
 }
@@ -161,6 +161,9 @@ void textbox_cursor_follow_mouse(struct Textbox* self, int mx, int my)
 
 void textbox_add_char(struct Textbox* self, SDL_Renderer* rend, char c)
 {
+    if (self->highlighting)
+        textbox_del_highlighted(self, rend);
+
     char* curr_line = self->text->lines[self->cursor_pos.y];
     int len = strlen(curr_line) + 1;
 
@@ -182,6 +185,9 @@ void textbox_add_char(struct Textbox* self, SDL_Renderer* rend, char c)
 
 void textbox_add_nl(struct Textbox* self, SDL_Renderer* rend)
 {
+    if (self->highlighting)
+        textbox_del_highlighted(self, rend);
+
     char* line = self->text->lines[self->cursor_pos.y];
 
     char* copied = utils_substr(line, self->cursor_pos.x, strlen(line));

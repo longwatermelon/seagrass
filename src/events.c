@@ -31,9 +31,6 @@ void events_base(struct Prog* p, SDL_Event* evt)
         case SDL_MOUSEWHEEL:
             events_mousewheel(p, evt);
             break;
-        case SDL_MOUSEMOTION:
-            events_mouse_motion(p, evt);
-            break;
         }
     }
 
@@ -58,15 +55,19 @@ void events_keydown(struct Prog* p, SDL_Event* evt)
         switch (evt->key.keysym.sym)
         {
         case SDLK_RIGHT:
+            p->selected_textbox->highlighting = false;
             textbox_move_cursor(p->selected_textbox, 1, 0);
             break;
         case SDLK_LEFT:
+            p->selected_textbox->highlighting = false;
             textbox_move_cursor(p->selected_textbox, -1, 0);
             break;
         case SDLK_UP:
+            p->selected_textbox->highlighting = false;
             textbox_move_cursor(p->selected_textbox, 0, -1);
             break;
         case SDLK_DOWN:
+            p->selected_textbox->highlighting = false;
             textbox_move_cursor(p->selected_textbox, 0, 1);
             break;
         }
@@ -154,12 +155,5 @@ void events_mousewheel(struct Prog* p, SDL_Event* evt)
 {
     if (p->selected_textbox)
         textbox_move_view(p->selected_textbox, 0, -evt->wheel.y);
-}
-
-
-void events_mouse_motion(struct Prog* p, SDL_Event* evt)
-{
-    /* if (p->main_scrollbar->held) */
-    /*     scrollbar_scroll(p->main_scrollbar, evt->motion.yrel); */
 }
 
