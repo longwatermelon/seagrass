@@ -63,12 +63,11 @@ void prog_render(struct Prog* self)
 {
     SDL_RenderClear(self->rend);
 
+    tree_render(self->file_tree, self->rend);
     textbox_render(self->main_textbox, self->rend, self->main_textbox == self->selected_textbox);
     textbox_render_highlight(self->main_textbox, self->rend);
 
     scrollbar_render(self->main_scrollbar, self->rend);
-
-    tree_render(self->file_tree, self->rend);
 
     SDL_SetRenderDrawColor(self->rend, 0, 0, 0, 255);
     SDL_RenderPresent(self->rend);
@@ -109,5 +108,6 @@ void prog_open_file(struct Prog* self, const char* fp)
 {
     char* contents = utils_read_file(fp);
     textbox_set_text(self->main_textbox, self->rend, self->font, contents);
+    free(contents);
 }
 

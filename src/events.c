@@ -92,8 +92,6 @@ void events_mouse(struct Prog* p, SDL_Event* evt)
 {
     if (evt->button.button == SDL_BUTTON_LEFT)
         events_mouse_left(p, evt);
-    else if (evt->button.button == SDL_BUTTON_RIGHT)
-        events_mouse_right(p, evt);
 }
 
 
@@ -142,11 +140,6 @@ void events_mouse_left(struct Prog* p, SDL_Event* evt)
 }
 
 
-void events_mouse_right(struct Prog* p, SDL_Event* evt)
-{
-}
-
-
 void events_mouse_release(struct Prog* p, SDL_Event* evt)
 {
     g_mouse_down = false;
@@ -167,7 +160,10 @@ void events_mouse_release(struct Prog* p, SDL_Event* evt)
 
 void events_mousewheel(struct Prog* p, SDL_Event* evt)
 {
-    if (p->selected_textbox)
-        textbox_move_view(p->selected_textbox, 0, -evt->wheel.y);
+    SDL_Point mouse;
+    SDL_GetMouseState(&mouse.x, &mouse.y);
+
+    if (utils_p_in_rect(mouse, p->main_textbox->rect))
+        textbox_move_view(p->main_textbox, 0, -evt->wheel.y);
 }
 
