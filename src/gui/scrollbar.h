@@ -22,7 +22,7 @@ void scrollbar_free(struct Scrollbar* self);
 
 void scrollbar_render(struct Scrollbar* self, SDL_Renderer* rend);
 
-void scrollbar_update(struct Scrollbar* self, int total_units, int rows_visible);
+void scrollbar_update_units(struct Scrollbar* self, int total_units, int bar_len_units);
 
 void scrollbar_scroll(struct Scrollbar* self, int y);
 

@@ -40,11 +40,11 @@ void scrollbar_render(struct Scrollbar* self, SDL_Renderer* rend)
 }
 
 
-void scrollbar_update(struct Scrollbar* self, int total_units, int rows_visible)
+void scrollbar_update_units(struct Scrollbar* self, int total_units, int bar_len_units)
 {
     self->total_units = total_units;
     self->px_per_unit = (float)self->rect.h / (float)total_units;
-    self->bar_len_units = rows_visible;
+    self->bar_len_units = bar_len_units;
 }
 
 
