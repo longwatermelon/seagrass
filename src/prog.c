@@ -48,25 +48,9 @@ void prog_mainloop(struct Prog* self)
     {
         events_base(self, &evt);
 
-        int wx, wy;
-        SDL_GetWindowSize(self->window, &wx, &wy);
-
-        self->main_textbox->rect.w = wx - self->main_textbox->rect.x - 20;
-        self->main_textbox->rect.h = wy - self->main_textbox->rect.y;
-
-        self->main_scrollbar->rect.x = wx - self->main_scrollbar->rect.w;
-        self->main_scrollbar->rect.h = wy - self->main_scrollbar->rect.y;
-
-        int rows = (self->main_textbox->rect.h - (self->main_textbox->rect.h % self->main_textbox->text->char_dim.y)) / self->main_textbox->text->char_dim.y;
-
-        scrollbar_update_units(self->main_scrollbar, self->main_textbox->text->nlines + rows - 1, rows);
-        scrollbar_follow_mouse(self->main_scrollbar);
-
-        if (self->main_scrollbar->held)
-            self->main_textbox->view_pos.y = self->main_scrollbar->bar_top_units;
-        else
-            self->main_scrollbar->bar_top_units = self->main_textbox->view_pos.y;
-
+        prog_mainloop_textbox(self);
+        prog_mainloop_scrollbar(self);
+    
         prog_render(self);
     }
 }
@@ -83,5 +67,35 @@ void prog_render(struct Prog* self)
 
     SDL_SetRenderDrawColor(self->rend, 0, 0, 0, 255);
     SDL_RenderPresent(self->rend);
+}
+
+
+void prog_mainloop_textbox(struct Prog* self)
+{
+    int wx, wy;
+    SDL_GetWindowSize(self->window, &wx, &wy);
+
+    self->main_textbox->rect.w = wx - self->main_textbox->rect.x - 20;
+    self->main_textbox->rect.h = wy - self->main_textbox->rect.y;
+}
+
+
+void prog_mainloop_scrollbar(struct Prog* self)
+{
+    int wx, wy;
+    SDL_GetWindowSize(self->window, &wx, &wy);
+
+    self->main_scrollbar->rect.x = wx - self->main_scrollbar->rect.w;
+    self->main_scrollbar->rect.h = wy - self->main_scrollbar->rect.y;
+
+    int rows = (self->main_textbox->rect.h - (self->main_textbox->rect.h % self->main_textbox->text->char_dim.y)) / self->main_textbox->text->char_dim.y;
+
+    scrollbar_update_units(self->main_scrollbar, self->main_textbox->text->nlines + rows - 1, rows);
+    scrollbar_follow_mouse(self->main_scrollbar);
+
+    if (self->main_scrollbar->held)
+        self->main_textbox->view_pos.y = self->main_scrollbar->bar_top_units;
+    else
+        self->main_scrollbar->bar_top_units = self->main_textbox->view_pos.y;
 }
 

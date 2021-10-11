@@ -27,5 +27,8 @@ void prog_free(struct Prog* self);
 void prog_mainloop(struct Prog* self);
 void prog_render(struct Prog* self);
 
+void prog_mainloop_textbox(struct Prog* self);
+void prog_mainloop_scrollbar(struct Prog* self);
+
 #endif
 
