@@ -29,6 +29,7 @@ struct Prog* prog_alloc()
 void prog_free(struct Prog* self)
 {
     textbox_free(self->main_textbox);
+    scrollbar_free(self->main_scrollbar);
 
     TTF_CloseFont(self->font);
 
