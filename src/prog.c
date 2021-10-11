@@ -60,6 +60,7 @@ void prog_mainloop(struct Prog* self)
         int rows = (self->main_textbox->rect.h - (self->main_textbox->rect.h % self->main_textbox->text->char_dim.y)) / self->main_textbox->text->char_dim.y;
 
         scrollbar_update_units(self->main_scrollbar, self->main_textbox->text->nlines + rows - 1, rows);
+        scrollbar_follow_mouse(self->main_scrollbar);
 
         if (self->main_scrollbar->held)
             self->main_textbox->view_pos.y = self->main_scrollbar->bar_top_units;

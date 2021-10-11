@@ -122,6 +122,7 @@ void events_mouse_left(struct Prog* p, SDL_Event* evt)
     {
         p->selected_textbox = 0;
         p->main_scrollbar->held = true;
+        p->main_scrollbar->mouse_dist = mouse.y - p->main_scrollbar->rect.y;
     }
 }
 
@@ -158,7 +159,7 @@ void events_mousewheel(struct Prog* p, SDL_Event* evt)
 
 void events_mouse_motion(struct Prog* p, SDL_Event* evt)
 {
-    if (p->main_scrollbar->held)
-        scrollbar_scroll(p->main_scrollbar, evt->motion.yrel);
+    /* if (p->main_scrollbar->held) */
+    /*     scrollbar_scroll(p->main_scrollbar, evt->motion.yrel); */
 }
 

@@ -12,6 +12,7 @@ struct Scrollbar* scrollbar_alloc(SDL_Rect rect)
     self->px_per_unit = 0.f;
 
     self->held = false;
+    self->mouse_dist = 0;
 
     return self;
 }
@@ -45,6 +46,21 @@ void scrollbar_update_units(struct Scrollbar* self, int total_units, int bar_len
     self->total_units = total_units;
     self->px_per_unit = (float)self->rect.h / (float)total_units;
     self->bar_len_units = bar_len_units;
+}
+
+
+void scrollbar_follow_mouse(struct Scrollbar* self)
+{
+    int my;
+    SDL_GetMouseState(0, &my);
+
+    my -= self->rect.y;
+
+    if (abs(my - self->mouse_dist) >= self->px_per_unit)
+    {
+        scrollbar_scroll(self, roundf((float)(my - self->mouse_dist) / self->px_per_unit));
+        self->mouse_dist = my;
+    }
 }
 
 
