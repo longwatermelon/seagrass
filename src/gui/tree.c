@@ -9,6 +9,7 @@ struct Tree* tree_alloc(SDL_Point pos, const char* path, SDL_Renderer* rend)
 {
     struct Tree* self = malloc(sizeof(struct Tree));
     self->path = path;
+    self->orig_pos = pos;
     self->pos = pos;
     self->path = path;
 
@@ -20,9 +21,11 @@ struct Tree* tree_alloc(SDL_Point pos, const char* path, SDL_Renderer* rend)
 
     node_toggle_opened(self->root, rend, self->font);
 
-    self->ntextures = 2;
+    self->ntextures = 4;
     self->textures[TEX_FOLDER] = IMG_LoadTexture(rend, "res/folder.png");
     self->textures[TEX_FILE] = IMG_LoadTexture(rend, "res/file.png");
+    self->textures[TEX_ARR_R] = IMG_LoadTexture(rend, "res/arrow_right.png");
+    self->textures[TEX_ARR_D] = IMG_LoadTexture(rend, "res/arrow_down.png");
 
     self->highlighted_y = -1;
 
@@ -45,8 +48,8 @@ void tree_free(struct Tree* self)
 int tree_render(struct Tree* self, SDL_Renderer* rend)
 {
     // SDL_Point* passed in will be modified so copy
-    SDL_Point start = (SDL_Point){ .x = self->pos.x, .y = self->pos.y - self->char_dim.y };
-    node_render(self->root, rend, &start, self->textures);
+    SDL_Point start = (SDL_Point){ .x = self->pos.x + 20, .y = self->pos.y - self->char_dim.y };
+    node_render(self->root, rend, &start, self->textures, self->orig_pos.y - self->char_dim.y);
 
     if (self->highlighted_y != -1)
     {
@@ -91,5 +94,24 @@ struct Node* tree_clicked(struct Tree* self, int mx, int my)
 {
     SDL_Point start = (SDL_Point){ .x = self->pos.x, .y = self->pos.y - self->char_dim.y };
     return node_find_rect(self->root, &start, my);
+}
+
+
+void tree_scroll(struct Tree* self, int y, int win_h)
+{
+    int tmp = self->pos.y - self->char_dim.y;
+    node_lowest_y(self->root, &tmp);
+
+    if (y < 0 && tmp < win_h)
+        return;
+
+    int prev = self->pos.y;
+
+    self->pos.y += y * self->char_dim.y;
+
+    if (self->pos.y > self->orig_pos.y)
+        self->pos.y = self->orig_pos.y;
+
+    self->highlighted_y += self->pos.y - prev;
 }
 

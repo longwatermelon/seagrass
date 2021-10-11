@@ -6,12 +6,15 @@
 enum
 {
     TEX_FOLDER,
-    TEX_FILE
+    TEX_FILE,
+    TEX_ARR_R,
+    TEX_ARR_D
 };
 
 struct Tree
 {
     const char* path;
+    SDL_Point orig_pos;
     SDL_Point pos;
 
     TTF_Font* font;
@@ -19,7 +22,7 @@ struct Tree
 
     struct Node* root;
 
-    SDL_Texture* textures[2];
+    SDL_Texture* textures[4];
     int ntextures;
 
     int highlighted_y;
@@ -33,6 +36,11 @@ int tree_render(struct Tree* self, SDL_Renderer* rend);
 void tree_render_highlight(struct Tree* self, SDL_Renderer* rend, int my, int lowest_y);
 
 struct Node* tree_clicked(struct Tree* self, int mx, int my);
+
+// Scrolls by y elements
+void tree_scroll(struct Tree* self, int y, int win_h);
+
+int tree_count_visible_nodes(struct Tree* self);
 
 #endif
 

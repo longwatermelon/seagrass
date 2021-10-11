@@ -38,30 +38,41 @@ void node_free(struct Node* self)
 }
 
 
-void node_render(struct Node* self, SDL_Renderer* rend, SDL_Point* p, SDL_Texture** tex)
+void node_render(struct Node* self, SDL_Renderer* rend, SDL_Point* p, SDL_Texture** tex, int top_y)
 {
     SDL_Rect rect = { .x = p->x, .y = p->y };
     SDL_QueryTexture(self->tex, 0, 0, &rect.w, &rect.h);
 
-    SDL_RenderCopy(rend, self->tex, 0, &rect);
-
-    SDL_Rect icon_rect = { .x = p->x - 20, .y = p->y, .w = 16, .h = 16 };
-
-    int index;
-
-    switch (self->type)
+    if (p->y >= top_y)
     {
-    case DT_DIR: index = TEX_FOLDER; break;
-    case DT_REG: index = TEX_FILE; break;
+        SDL_RenderCopy(rend, self->tex, 0, &rect);
+
+        SDL_Rect icon_rect = { .x = p->x - 20, .y = p->y, .w = 16, .h = 16 };
+
+        int index;
+
+        switch (self->type)
+        {
+        case DT_DIR:
+        {
+            index = TEX_FOLDER;
+
+            SDL_Rect arrow_rect = { .x = p->x - 40 + 2, .y = p->y + 2, .w = 12, .h = 12 };
+            SDL_RenderCopy(rend, (self->opened ? tex[TEX_ARR_D] : tex[TEX_ARR_R]), 0, &arrow_rect);
+        } break;
+        case DT_REG:
+            index = TEX_FILE;
+            break;
+        }
+
+        SDL_RenderCopy(rend, tex[index], 0, &icon_rect);
     }
-
-    SDL_RenderCopy(rend, tex[index], 0, &icon_rect);
-
+    
     p->y += rect.h;
     p->x += 20;
 
     for (int i = 0; i < self->node_num; ++i)
-        node_render(self->nodes[i], rend, p, tex);
+        node_render(self->nodes[i], rend, p, tex, top_y);
 
     p->x -= 20;
 }
@@ -108,6 +119,18 @@ struct Node* node_find_rect(struct Node* self, SDL_Point* start, int find_y)
     }
 
     return 0;
+}
+
+
+void node_lowest_y(struct Node* self, int* y)
+{
+    int h;
+    SDL_QueryTexture(self->tex, 0, 0, 0, &h);
+
+    *y += h;
+
+    for (int i = 0; i < self->node_num; ++i)
+        node_lowest_y(self->nodes[i], y);
 }
 
 

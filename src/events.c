@@ -167,5 +167,12 @@ void events_mousewheel(struct Prog* p, SDL_Event* evt)
 
     if (utils_p_in_rect(mouse, p->main_textbox->rect))
         textbox_move_view(p->main_textbox, 0, -evt->wheel.y);
+
+    int wx, wy;
+    SDL_GetWindowSize(p->window, &wx, &wy);
+    SDL_Rect tree = { .x = p->file_tree->orig_pos.x, .y = p->file_tree->orig_pos.y, .w = 300, .h = wy - p->file_tree->orig_pos.y };
+
+    if (utils_p_in_rect(mouse, tree))
+        tree_scroll(p->file_tree, evt->wheel.y, wy);
 }
 
