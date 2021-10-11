@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 
 bool g_mouse_down = false;
+bool g_ctrl_down = false;
 
 
 void events_base(struct Prog* p, SDL_Event* evt)
@@ -84,6 +85,30 @@ void events_keydown(struct Prog* p, SDL_Event* evt)
         default:
             break;
         }
+    }
+
+    switch (evt->key.keysym.sym)
+    {
+    case SDLK_LCTRL:
+    case SDLK_RCTRL:
+        g_ctrl_down = true;
+        break;
+    case SDLK_s:
+        if (g_ctrl_down)
+            prog_save_file(p);
+        break;
+    }
+}
+
+
+void events_keyup(struct Prog* p, SDL_Event* evt)
+{
+    switch (evt->key.keysym.sym)
+    {
+    case SDLK_LCTRL:
+    case SDLK_RCTRL:
+        g_ctrl_down = false;
+        break;
     }
 }
 

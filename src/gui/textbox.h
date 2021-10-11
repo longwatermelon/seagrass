@@ -57,6 +57,8 @@ void textbox_del_highlighted_line(struct Textbox* self, SDL_Renderer* rend, int 
 
 // Frees existing textures and text, loads new text
 void textbox_set_text(struct Textbox* self, SDL_Renderer* rend, TTF_Font* font, char* text);
+// Gets text contents
+char* textbox_get_text(struct Textbox* self);
 
 // Converts character coordinates (row, col) to pixel coordinates
 static SDL_Point textbox_char_to_pix_pos(struct Textbox* self, SDL_Point pos);

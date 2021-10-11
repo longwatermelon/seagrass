@@ -153,6 +153,23 @@ void text_remove_texture(struct Text* self, SDL_Renderer* rend, int index)
 }
 
 
+char* text_as_str(struct Text* self)
+{
+    char* str = malloc(0);
+    int prev_len = 0;
+
+    for (int i = 0; i < self->nlines; ++i)
+    {
+        str = realloc(str, sizeof(char) * (prev_len + strlen(self->lines[i]) + 2));
+        sprintf(&str[prev_len], "%s\n", self->lines[i]);
+
+        prev_len = strlen(str);
+    }
+
+    return str;
+}
+
+
 static SDL_Texture** text_split_str_into_textures(struct Text* self, SDL_Renderer* rend)
 {
     SDL_Texture** textures = malloc(sizeof(SDL_Texture*) * self->nlines);

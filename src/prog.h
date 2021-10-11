@@ -4,6 +4,7 @@
 #include "gui/scrollbar.h"
 #include "gui/tree.h"
 #include <stdbool.h>
+#include <dirent.h>
 #include <SDL.h>
 #include <SDL_ttf.h>
 
@@ -15,6 +16,8 @@ struct Prog
     SDL_Renderer* rend;
 
     TTF_Font* font;
+
+    char opened_file[PATH_MAX];
 
     struct Textbox* main_textbox;
     struct Scrollbar* main_scrollbar;
@@ -33,6 +36,7 @@ void prog_mainloop_textbox(struct Prog* self);
 void prog_mainloop_scrollbar(struct Prog* self);
 
 void prog_open_file(struct Prog* self, const char* fp);
+void prog_save_file(struct Prog* self);
 
 #endif
 

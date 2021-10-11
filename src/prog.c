@@ -113,8 +113,22 @@ void prog_mainloop_scrollbar(struct Prog* self)
 
 void prog_open_file(struct Prog* self, const char* fp)
 {
+    snprintf(self->opened_file, strlen(fp) + 1, "%s", fp);
+
     char* contents = utils_read_file(fp);
     textbox_set_text(self->main_textbox, self->rend, self->font, contents);
     free(contents);
+}
+
+
+void prog_save_file(struct Prog* self)
+{
+    FILE* fp = fopen(self->opened_file, "w");
+
+    char* out = textbox_get_text(self->main_textbox);
+    fprintf(fp, "%s", out);
+
+    free(out);
+    fclose(fp);
 }
 

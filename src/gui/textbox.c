@@ -359,6 +359,12 @@ void textbox_set_text(struct Textbox* self, SDL_Renderer* rend, TTF_Font* font, 
 }
 
 
+char* textbox_get_text(struct Textbox* self)
+{
+    return text_as_str(self->text);
+}
+
+
 static SDL_Point textbox_char_to_pix_pos(struct Textbox* self, SDL_Point pos)
 {
     return (SDL_Point){
