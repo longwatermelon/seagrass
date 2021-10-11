@@ -31,6 +31,7 @@ void prog_free(struct Prog* self)
 {
     textbox_free(self->main_textbox);
     scrollbar_free(self->main_scrollbar);
+    tree_free(self->file_tree);
 
     TTF_CloseFont(self->font);
 
