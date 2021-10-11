@@ -13,6 +13,10 @@ add_library(gui
     textbox.c
     scrollbar.h
     scrollbar.c
+    tree/tree.h
+    tree/tree.c
+    tree/node.h
+    tree/node.c
 )
 
 target_compile_options(gui PRIVATE -ggdb)

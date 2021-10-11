@@ -2,6 +2,7 @@
 #define PROG_H
 
 #include "gui/scrollbar.h"
+#include "gui/tree/tree.h"
 #include <stdbool.h>
 #include <SDL.h>
 #include <SDL_ttf.h>
@@ -17,6 +18,7 @@ struct Prog
 
     struct Textbox* main_textbox;
     struct Scrollbar* main_scrollbar;
+    struct Tree* file_tree;
 
     struct Textbox* selected_textbox;
 };
@@ -29,6 +31,7 @@ void prog_render(struct Prog* self);
 
 void prog_mainloop_textbox(struct Prog* self);
 void prog_mainloop_scrollbar(struct Prog* self);
+void prog_mainloop_tree(struct Prog* self);
 
 #endif
 
