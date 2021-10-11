@@ -3,6 +3,12 @@
 
 #include "node.h"
 
+enum
+{
+    TEX_FOLDER,
+    TEX_FILE
+};
+
 struct Tree
 {
     const char* path;
@@ -12,6 +18,9 @@ struct Tree
     SDL_Point char_dim;
 
     struct Node* root;
+
+    SDL_Texture* textures[2];
+    int ntextures;
 };
 
 struct Tree* tree_alloc(SDL_Point pos, const char* path, SDL_Renderer* rend);

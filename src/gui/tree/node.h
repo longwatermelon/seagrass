@@ -10,17 +10,19 @@ struct Node
     char* path;
     SDL_Texture* tex;
 
+    unsigned char type;
+
     struct Node** nodes;
     int node_num;
 
     bool opened;
 };
 
-struct Node* node_alloc(SDL_Renderer* rend, TTF_Font* font, char* path);
+struct Node* node_alloc(SDL_Renderer* rend, TTF_Font* font, char* path, unsigned char type);
 void node_free(struct Node* self);
 
 // Renders node at point p
-void node_render(struct Node* self, SDL_Renderer* rend, SDL_Point* p);
+void node_render(struct Node* self, SDL_Renderer* rend, SDL_Point* p, SDL_Texture** tex);
 
 void node_toggle_opened(struct Node* self, SDL_Renderer* rend, TTF_Font* font);
 

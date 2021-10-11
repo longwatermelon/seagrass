@@ -1,13 +1,15 @@
 #include "node.h"
 #include "fs.h"
+#include "tree.h"
 #include "../utils.h"
 #include <dirent.h>
 
 
-struct Node* node_alloc(SDL_Renderer* rend, TTF_Font* font, char* path)
+struct Node* node_alloc(SDL_Renderer* rend, TTF_Font* font, char* path, unsigned char type)
 {
     struct Node* self = malloc(sizeof(struct Node));
     self->path = path;
+    self->type = type;
 
     char* name = fs_filename(self->path);
     self->tex = utils_render_text(rend, name, font, (SDL_Color){ 255, 255, 255 });
@@ -36,19 +38,32 @@ void node_free(struct Node* self)
 }
 
 
-void node_render(struct Node* self, SDL_Renderer* rend, SDL_Point* p)
+void node_render(struct Node* self, SDL_Renderer* rend, SDL_Point* p, SDL_Texture** tex)
 {
     SDL_Rect rect = { .x = p->x, .y = p->y };
     SDL_QueryTexture(self->tex, 0, 0, &rect.w, &rect.h);
 
     SDL_RenderCopy(rend, self->tex, 0, &rect);
+
+    SDL_Rect icon_rect = { .x = p->x - 20, .y = p->y, .w = 16, .h = 16 };
+
+    int index;
+
+    switch (self->type)
+    {
+    case DT_DIR: index = TEX_FOLDER; break;
+    case DT_REG: index = TEX_FILE; break;
+    }
+
+    SDL_RenderCopy(rend, tex[index], 0, &icon_rect);
+
     p->y += rect.h;
-    p->x += 10;
+    p->x += 20;
 
     for (int i = 0; i < self->node_num; ++i)
-        node_render(self->nodes[i], rend, p);
+        node_render(self->nodes[i], rend, p, tex);
 
-    p->x -= 10;
+    p->x -= 20;
 }
 
 
@@ -111,10 +126,10 @@ static struct Node** node_read_dir_node(struct Node* self, SDL_Renderer* rend, T
     struct Node** nodes = malloc(sizeof(struct Node*) * *count);
 
     for (int i = 0; i < ndirs; ++i)
-        nodes[i] = node_alloc(rend, font, dirs[i]);
+        nodes[i] = node_alloc(rend, font, dirs[i], DT_DIR);
 
     for (int i = 0; i < nfiles; ++i)
-        nodes[ndirs + i] = node_alloc(rend, font, files[i]);
+        nodes[ndirs + i] = node_alloc(rend, font, files[i], DT_REG);
 
     free(files);
     free(dirs);
