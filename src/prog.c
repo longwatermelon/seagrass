@@ -69,7 +69,7 @@ void prog_render(struct Prog* self)
 
     scrollbar_render(self->main_scrollbar, self->rend);
 
-    SDL_SetRenderDrawColor(self->rend, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(self->rend, 20, 20, 20, 255);
     SDL_RenderPresent(self->rend);
 }
 
