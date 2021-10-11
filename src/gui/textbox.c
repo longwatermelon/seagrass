@@ -351,6 +351,14 @@ void textbox_del_highlighted_line(struct Textbox* self, SDL_Renderer* rend, int 
 }
 
 
+void textbox_set_text(struct Textbox* self, SDL_Renderer* rend, TTF_Font* font, char* text)
+{
+    text_free(self->text);
+    self->text = text_alloc(rend, (SDL_Point){ .x = self->rect.x, .y = self->rect.y }, text, font, (SDL_Color){ 255, 255, 255 });
+    self->view_pos = (SDL_Point){ .x = 0, .y = 0 };
+}
+
+
 static SDL_Point textbox_char_to_pix_pos(struct Textbox* self, SDL_Point pos)
 {
     return (SDL_Point){

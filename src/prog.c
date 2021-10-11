@@ -1,5 +1,6 @@
 #include "prog.h"
 #include "events.h"
+#include "utils.h"
 #include "gui/text.h"
 #include "gui/textbox.h"
 
@@ -104,7 +105,9 @@ void prog_mainloop_scrollbar(struct Prog* self)
 }
 
 
-void prog_mainloop_tree(struct Prog* self)
+void prog_open_file(struct Prog* self, const char* fp)
 {
+    char* contents = utils_read_file(fp);
+    textbox_set_text(self->main_textbox, self->rend, self->font, contents);
 }
 

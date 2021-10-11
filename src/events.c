@@ -2,6 +2,7 @@
 #include "prog.h"
 #include "gui/textbox.h"
 #include "gui/utils.h"
+#include <sys/stat.h>
 
 bool g_mouse_down = false;
 
@@ -128,9 +129,15 @@ void events_mouse_left(struct Prog* p, SDL_Event* evt)
 
     struct Node* clicked = tree_clicked(p->file_tree, mouse.x, mouse.y);
 
-    if (clicked)
+    if (clicked && mouse.x < p->main_textbox->rect.x)
     {
-        node_toggle_opened(clicked, p->rend, p->file_tree->font);
+        struct stat sb;
+        stat(clicked->path, &sb);
+
+        if (S_ISDIR(sb.st_mode))
+            node_toggle_opened(clicked, p->rend, p->file_tree->font);
+        else if (S_ISREG(sb.st_mode))
+            prog_open_file(p, clicked->path);
     }
 }
 

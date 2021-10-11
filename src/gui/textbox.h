@@ -55,6 +55,9 @@ void textbox_del_highlighted(struct Textbox* self, SDL_Renderer* rend);
 // Deletes line at index from begin to end.
 void textbox_del_highlighted_line(struct Textbox* self, SDL_Renderer* rend, int index, int begin, int end);
 
+// Frees existing textures and text, loads new text
+void textbox_set_text(struct Textbox* self, SDL_Renderer* rend, TTF_Font* font, char* text);
+
 // Converts character coordinates (row, col) to pixel coordinates
 static SDL_Point textbox_char_to_pix_pos(struct Textbox* self, SDL_Point pos);
 

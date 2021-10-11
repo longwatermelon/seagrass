@@ -1,5 +1,5 @@
-#ifndef UTILS_H
-#define UTILS_H
+#ifndef UTILS_GUI_H
+#define UTILS_GUI_H
 
 #include <stdbool.h>
 #include <SDL.h>

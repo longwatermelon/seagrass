@@ -31,7 +31,8 @@ void prog_render(struct Prog* self);
 
 void prog_mainloop_textbox(struct Prog* self);
 void prog_mainloop_scrollbar(struct Prog* self);
-void prog_mainloop_tree(struct Prog* self);
+
+void prog_open_file(struct Prog* self, const char* fp);
 
 #endif
 
