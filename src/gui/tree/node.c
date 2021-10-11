@@ -16,6 +16,8 @@ struct Node* node_alloc(SDL_Renderer* rend, TTF_Font* font, char* path)
     self->nodes = malloc(0);
     self->node_num = 0;
 
+    self->opened = false;
+
     return self;
 }
 
@@ -50,9 +52,25 @@ void node_render(struct Node* self, SDL_Renderer* rend, SDL_Point* p)
 }
 
 
-void node_read_subnodes(struct Node* self, SDL_Renderer* rend, TTF_Font* font)
+void node_toggle_opened(struct Node* self, SDL_Renderer* rend, TTF_Font* font)
 {
-    self->nodes = node_read_dir_node(self, rend, font, self->path, &self->node_num);
+    if (self->opened)
+    {
+        for (int i = 0; i < self->node_num; ++i)
+            node_free(self->nodes[i]);
+
+        free(self->nodes);
+
+        self->nodes = malloc(0);
+        self->node_num = 0;
+
+        self->opened = false;
+    }
+    else
+    {
+        self->opened = true;
+        self->nodes = node_read_dir_node(self, rend, font, self->path, &self->node_num);
+    }
 }
 
 

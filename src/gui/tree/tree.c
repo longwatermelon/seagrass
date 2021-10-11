@@ -17,7 +17,7 @@ struct Tree* tree_alloc(SDL_Point pos, const char* path, SDL_Renderer* rend)
     char* abspath = realpath(path, 0);
     self->root = node_alloc(rend, self->font, abspath);
 
-    node_read_subnodes(self->root, rend, self->font);
+    node_toggle_opened(self->root, rend, self->font);
 
     return self;
 }

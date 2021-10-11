@@ -130,7 +130,7 @@ void events_mouse_left(struct Prog* p, SDL_Event* evt)
 
     if (clicked)
     {
-        node_read_subnodes(clicked, p->rend, p->file_tree->font);
+        node_toggle_opened(clicked, p->rend, p->file_tree->font);
     }
 }
 
