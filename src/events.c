@@ -145,5 +145,7 @@ void events_mousewheel(struct Prog* p, SDL_Event* evt)
     {
         textbox_move_view(p->selected_textbox, 0, -evt->wheel.y);
     }
+
+    scrollbar_scroll(p->main_scrollbar, -evt->wheel.y);
 }
 

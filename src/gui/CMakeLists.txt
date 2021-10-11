@@ -11,6 +11,8 @@ add_library(gui
     utils.c
     textbox.h
     textbox.c
+    scrollbar.h
+    scrollbar.c
 )
 
 target_compile_options(gui PRIVATE -ggdb)

@@ -18,6 +18,8 @@ struct Prog* prog_alloc()
     SDL_GetWindowSize(self->window, &wx, &wy);
 
     self->main_textbox = textbox_alloc((SDL_Rect){ .x = 200, .y = 100, .w = wx - 200, .h = wy - 100 }, self->rend, self->font, (SDL_Color){ 50, 50, 50 });
+    self->main_scrollbar = scrollbar_alloc((SDL_Rect){ .x = wx - 20, .y = 100, .w = 20, .h = wy - 100 });
+
     self->selected_textbox = 0;
 
     return self;
@@ -45,23 +47,34 @@ void prog_mainloop(struct Prog* self)
     {
         events_base(self, &evt);
 
-        SDL_GetWindowSize(self->window, &self->main_textbox->rect.w, &self->main_textbox->rect.h);
-        self->main_textbox->rect.w -= self->main_textbox->rect.x;
-        self->main_textbox->rect.h -= self->main_textbox->rect.y;
+        int wx, wy;
+        SDL_GetWindowSize(self->window, &wx, &wy);
 
-        SDL_RenderClear(self->rend);
+        self->main_textbox->rect.w = wx - self->main_textbox->rect.x;
+        self->main_textbox->rect.h = wy - self->main_textbox->rect.y;
+
+        self->main_scrollbar->rect.x = wx - self->main_scrollbar->rect.w;
+        self->main_scrollbar->rect.h = wy - self->main_scrollbar->rect.y;
+
+        int rows = (self->main_textbox->rect.h - (self->main_textbox->rect.h % self->main_textbox->text->char_dim.y)) / self->main_textbox->text->char_dim.y;
+
+        scrollbar_update(self->main_scrollbar, self->main_textbox->text->nlines + rows - 1, rows);
 
         prog_render(self);
-
-        SDL_SetRenderDrawColor(self->rend, 0, 0, 0, 255);
-        SDL_RenderPresent(self->rend);
     }
 }
 
 
 void prog_render(struct Prog* self)
 {
+    SDL_RenderClear(self->rend);
+
     textbox_render(self->main_textbox, self->rend, self->main_textbox == self->selected_textbox);
     textbox_render_highlight(self->main_textbox, self->rend);
+
+    scrollbar_render(self->main_scrollbar, self->rend);
+
+    SDL_SetRenderDrawColor(self->rend, 0, 0, 0, 255);
+    SDL_RenderPresent(self->rend);
 }
 
