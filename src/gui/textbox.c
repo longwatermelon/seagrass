@@ -98,6 +98,9 @@ void textbox_render_highlight_line(struct Textbox* self, SDL_Renderer* rend, int
         int diff = self->rect.x - rect.x;
         rect.x += diff;
         rect.w -= diff;
+
+        if (rect.w < 0)
+            return;
     }
 
     SDL_SetRenderDrawBlendMode(rend, SDL_BLENDMODE_BLEND);
