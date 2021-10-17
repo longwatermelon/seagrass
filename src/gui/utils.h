@@ -2,8 +2,8 @@
 #define UTILS_GUI_H
 
 #include <stdbool.h>
-#include <SDL.h>
-#include <SDL_ttf.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 SDL_Texture* utils_render_text(SDL_Renderer* rend, const char* text, TTF_Font* font, SDL_Color color);
 

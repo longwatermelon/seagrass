@@ -1,7 +1,7 @@
 #ifndef EVENTS_H
 #define EVENTS_H
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 struct Prog;
 
 void events_base(struct Prog* p, SDL_Event* evt);

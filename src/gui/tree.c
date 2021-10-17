@@ -1,8 +1,8 @@
 #include "tree.h"
 #include "utils.h"
 #include <dirent.h>
-#include <SDL_ttf.h>
-#include <SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 
 
 struct Tree* tree_alloc(SDL_Point pos, const char* path, SDL_Renderer* rend)
