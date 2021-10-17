@@ -27,6 +27,16 @@ struct Prog* prog_alloc()
 
     self->opened_file[0] = '\0';
 
+    self->binary_show_warning = false;
+    self->binary_confirm_btn = button_alloc((SDL_Rect){
+        .x = self->main_textbox->rect.x + 40,
+        .y = self->main_textbox->rect.y + 40, 
+        .w = 100, .h = 20 }, "View file", (SDL_Color){ 100, 100, 100 }, self->rend, self->font);
+
+    self->binary_warning_text = text_alloc(self->rend, (SDL_Point){
+        .x = self->main_textbox->rect.x + 40,
+        .y = self->main_textbox->rect.y + 10 }, "This file contains non ascii characters and won't be rendered correctly.", self->font, (SDL_Color){ 255, 255, 255 });
+
     return self;
 }
 
@@ -54,9 +64,16 @@ void prog_mainloop(struct Prog* self)
     {
         events_base(self, &evt);
 
-        prog_mainloop_textbox(self);
-        prog_mainloop_scrollbar(self);
-    
+        if (!self->binary_show_warning)
+        {
+            prog_mainloop_textbox(self);
+            prog_mainloop_scrollbar(self);
+        }
+        else
+        {
+            prog_mainloop_binary_warning(self);
+        }
+
         prog_render(self);
     }
 }
@@ -74,10 +91,17 @@ void prog_render(struct Prog* self)
     if (mx < self->main_textbox->rect.x)
         tree_render_highlight(self->file_tree, self->rend, my, lowest_y);
 
-    textbox_render(self->main_textbox, self->rend, self->main_textbox == self->selected_textbox);
-    textbox_render_highlight(self->main_textbox, self->rend);
+    if (self->binary_show_warning)
+    {
+        prog_render_binary_warning(self);
+    }
+    else
+    {
+        textbox_render(self->main_textbox, self->rend, self->main_textbox == self->selected_textbox);
+        textbox_render_highlight(self->main_textbox, self->rend);
 
-    scrollbar_render(self->main_scrollbar, self->rend, mx, my);
+        scrollbar_render(self->main_scrollbar, self->rend, mx, my);
+    }
 
     SDL_SetRenderDrawColor(self->rend, 50, 50, 50, 255);
     SDL_RenderPresent(self->rend);
@@ -114,14 +138,31 @@ void prog_mainloop_scrollbar(struct Prog* self)
 }
 
 
+void prog_mainloop_binary_warning(struct Prog* self)
+{
+    int mx, my;
+    SDL_GetMouseState(&mx, &my);
+
+    button_check_hover(self->binary_confirm_btn, mx, my);
+
+    if (self->binary_confirm_btn->down)
+        self->binary_show_warning = false;
+}
+
+
+void prog_render_binary_warning(struct Prog* self)
+{
+    text_render(self->binary_warning_text, self->rend, (SDL_Point){ 0, 0 }, 0);
+    button_render(self->binary_confirm_btn, self->rend);
+}
+
+
 void prog_open_file(struct Prog* self, const char* fp)
 {
     snprintf(self->opened_file, strlen(fp) + 1, "%s", fp);
 
     char* contents = fs_read_file(fp);
-    
-    if (fs_is_binary(contents))
-        printf("File is binary\n");
+    self->binary_show_warning = fs_is_binary(contents);
 
     textbox_set_text(self->main_textbox, self->rend, self->font, contents);
     free(contents);

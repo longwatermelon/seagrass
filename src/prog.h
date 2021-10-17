@@ -3,6 +3,8 @@
 
 #include "gui/scrollbar.h"
 #include "gui/tree.h"
+#include "gui/button.h"
+#include "gui/text.h"
 #include <stdbool.h>
 #include <dirent.h>
 #include <SDL2/SDL.h>
@@ -24,6 +26,11 @@ struct Prog
     struct Tree* file_tree;
 
     struct Textbox* selected_textbox;
+
+    // Binary file opened warning
+    bool binary_show_warning;
+    struct Text* binary_warning_text;
+    struct Button* binary_confirm_btn;
 };
 
 struct Prog* prog_alloc();
@@ -34,6 +41,9 @@ void prog_render(struct Prog* self);
 
 void prog_mainloop_textbox(struct Prog* self);
 void prog_mainloop_scrollbar(struct Prog* self);
+void prog_mainloop_binary_warning(struct Prog* self);
+
+void prog_render_binary_warning(struct Prog* self);
 
 void prog_open_file(struct Prog* self, const char* fp);
 void prog_save_file(struct Prog* self);

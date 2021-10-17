@@ -164,6 +164,8 @@ void events_mouse_left(struct Prog* p, SDL_Event* evt)
         else if (S_ISREG(sb.st_mode))
             prog_open_file(p, clicked->path);
     }
+
+    button_check_clicked(p->binary_confirm_btn, mouse.x, mouse.y);
 }
 
 
@@ -182,6 +184,8 @@ void events_mouse_release(struct Prog* p, SDL_Event* evt)
             p->selected_textbox->highlight_end = (SDL_Point){ .x = 0, .y = 0 };
         }
     }
+
+    p->binary_confirm_btn->down = false;
 }
 
 

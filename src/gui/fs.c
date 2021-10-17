@@ -75,7 +75,9 @@ char* fs_filename(const char* file)
 
 bool fs_is_binary(const char* text)
 {
-    for (int i = 0; i < strlen(text); ++i)
+    int len = strlen(text) > 800 ? 800 : strlen(text);
+
+    for (int i = 0; i < len; ++i)
         if (text[i] <= 0)
             return true;
 
