@@ -31,6 +31,7 @@ struct Prog
     bool binary_show_warning;
     struct Text* binary_warning_text;
     struct Button* binary_confirm_btn;
+    bool binary_confirm_btn_primed;
 };
 
 struct Prog* prog_alloc();

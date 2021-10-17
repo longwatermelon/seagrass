@@ -145,8 +145,11 @@ void prog_mainloop_binary_warning(struct Prog* self)
 
     button_check_hover(self->binary_confirm_btn, mx, my);
 
-    if (self->binary_confirm_btn->down)
+    if (self->binary_confirm_btn_primed && !self->binary_confirm_btn->down)
+    {
+        self->binary_confirm_btn_primed = false;
         self->binary_show_warning = false;
+    }
 }
 
 
