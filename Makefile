@@ -10,7 +10,7 @@ seagrass: $(OBJS)
 	for i in $(SUBDIRS); do (cd $$i; $(MAKE)); done
 	$(CC) $(CFLAGS) $(OBJS) -o $@ $(LIBS)
 
-%.o: %.c
+%.o: %.c %.h
 	$(CC) $(CFLAGS) -c $< -o $@ $(LIBS)
 
 clean:

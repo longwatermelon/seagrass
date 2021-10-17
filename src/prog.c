@@ -3,6 +3,7 @@
 #include "utils.h"
 #include "gui/text.h"
 #include "gui/textbox.h"
+#include "gui/fs.h"
 
 
 struct Prog* prog_alloc()
@@ -117,7 +118,11 @@ void prog_open_file(struct Prog* self, const char* fp)
 {
     snprintf(self->opened_file, strlen(fp) + 1, "%s", fp);
 
-    char* contents = utils_read_file(fp);
+    char* contents = fs_read_file(fp);
+    
+    if (fs_is_binary(contents))
+        printf("File is binary\n");
+
     textbox_set_text(self->main_textbox, self->rend, self->font, contents);
     free(contents);
 }

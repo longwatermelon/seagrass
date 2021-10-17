@@ -10,7 +10,7 @@ ARFLAGS=rc
 libgui.a: $(OBJS)
 	$(AR) $(ARFLAGS) $@ $(OBJS)
 
-%.o: %.c
+%.o: %.c %.h
 	$(CC) $(CFLAGS) -c $< -o $@ $(LIBS)
 
 clean:
