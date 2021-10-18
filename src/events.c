@@ -124,6 +124,22 @@ void events_mouse_left(struct Prog* p, SDL_Event* evt)
 {
     g_mouse_down = true;
 
+    if (p->binary_show_warning)
+    {
+        events_mouse_left_binary_warn(p, evt);
+    }
+    else
+    {
+        events_mouse_left_textbox(p, evt);
+        events_mouse_left_scrollbar(p, evt);
+    }
+
+    events_mouse_left_tree(p, evt);
+}
+
+
+void events_mouse_left_textbox(struct Prog* p, SDL_Event* evt)
+{
     SDL_Point mouse;
     SDL_GetMouseState(&mouse.x, &mouse.y);
 
@@ -136,12 +152,16 @@ void events_mouse_left(struct Prog* p, SDL_Event* evt)
     {
         p->selected_textbox->highlighting = true;
 
-        int mx, my;
-        SDL_GetMouseState(&mx, &my);
-
-        textbox_cursor_follow_mouse(p->selected_textbox, mx, my);
+        textbox_cursor_follow_mouse(p->selected_textbox, mouse.x, mouse.y);
         p->selected_textbox->highlight_begin = p->selected_textbox->cursor_pos;
     }
+}
+
+
+void events_mouse_left_scrollbar(struct Prog* p, SDL_Event* evt)
+{
+    SDL_Point mouse;
+    SDL_GetMouseState(&mouse.x, &mouse.y);
 
     if (utils_p_in_rect(mouse, p->main_scrollbar->rect))
     {
@@ -149,6 +169,13 @@ void events_mouse_left(struct Prog* p, SDL_Event* evt)
         p->main_scrollbar->held = true;
         p->main_scrollbar->mouse_dist = mouse.y - p->main_scrollbar->rect.y;
     }
+}
+
+
+void events_mouse_left_tree(struct Prog* p, SDL_Event* evt)
+{
+    SDL_Point mouse;
+    SDL_GetMouseState(&mouse.x, &mouse.y);
 
     struct Node* clicked = tree_clicked(p->file_tree, mouse.x, mouse.y);
 
@@ -164,14 +191,18 @@ void events_mouse_left(struct Prog* p, SDL_Event* evt)
         else if (S_ISREG(sb.st_mode))
             prog_open_file(p, clicked->path);
     }
+}
 
-    if (p->binary_show_warning)
-    {
-        button_check_clicked(p->binary_confirm_btn, mouse.x, mouse.y);
 
-        if (p->binary_confirm_btn->down)
-            p->binary_confirm_btn_primed = true;
-    }
+void events_mouse_left_binary_warn(struct Prog* p, SDL_Event* evt)
+{
+    SDL_Point mouse;
+    SDL_GetMouseState(&mouse.x, &mouse.y);
+
+    button_check_clicked(p->binary_confirm_btn, mouse.x, mouse.y);
+
+    if (p->binary_confirm_btn->down)
+        p->binary_confirm_btn_primed = true;
 }
 
 
