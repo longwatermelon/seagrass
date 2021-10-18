@@ -31,7 +31,7 @@ struct Prog* prog_alloc()
     self->binary_confirm_btn = button_alloc((SDL_Rect){
         .x = self->main_textbox->rect.x + 40,
         .y = self->main_textbox->rect.y + 40, 
-        .w = 100, .h = 20 }, "View file", (SDL_Color){ 100, 100, 100 }, self->rend, self->font);
+        .w = 150, .h = 20 }, "View anyways", (SDL_Color){ 100, 100, 100 }, self->rend, self->font);
 
     self->binary_warning_text = text_alloc(self->rend, (SDL_Point){
         .x = self->main_textbox->rect.x + 40,

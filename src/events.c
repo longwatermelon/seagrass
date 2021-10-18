@@ -165,10 +165,13 @@ void events_mouse_left(struct Prog* p, SDL_Event* evt)
             prog_open_file(p, clicked->path);
     }
 
-    button_check_clicked(p->binary_confirm_btn, mouse.x, mouse.y);
+    if (p->binary_show_warning)
+    {
+        button_check_clicked(p->binary_confirm_btn, mouse.x, mouse.y);
 
-    if (p->binary_confirm_btn->down)
-        p->binary_confirm_btn_primed = true;
+        if (p->binary_confirm_btn->down)
+            p->binary_confirm_btn_primed = true;
+    }
 }
 
 
