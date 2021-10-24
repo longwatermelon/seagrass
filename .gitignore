@@ -1,2 +1,4 @@
-build/
+bin/
+lib/
 compile_commands.json
+
