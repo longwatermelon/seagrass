@@ -44,7 +44,6 @@ void events_base(struct Prog* p, SDL_Event* evt)
             SDL_GetMouseState(&mx, &my);
 
             textbox_cursor_follow_mouse(p->selected_textbox, mx, my);
-            p->selected_textbox->highlight_end = p->selected_textbox->cursor_pos;
         }
     }
 }
@@ -213,12 +212,11 @@ void events_mouse_release(struct Prog* p, SDL_Event* evt)
 
     if (p->selected_textbox)
     {
-        if (p->selected_textbox->highlight_begin.x == p->selected_textbox->highlight_end.x &&
-            p->selected_textbox->highlight_begin.y == p->selected_textbox->highlight_end.y)
+        if (p->selected_textbox->highlight_begin.x == p->selected_textbox->cursor_pos.x &&
+            p->selected_textbox->highlight_begin.y == p->selected_textbox->cursor_pos.y)
         {
             p->selected_textbox->highlighting = false;
             p->selected_textbox->highlight_begin = (SDL_Point){ .x = 0, .y = 0 };
-            p->selected_textbox->highlight_end = (SDL_Point){ .x = 0, .y = 0 };
         }
     }
 

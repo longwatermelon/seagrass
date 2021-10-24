@@ -15,7 +15,6 @@ struct Textbox* textbox_alloc(SDL_Rect rect, SDL_Renderer* rend, TTF_Font* font,
 
     self->highlighting = false;
     self->highlight_begin = (SDL_Point){ 0, 0 };
-    self->highlight_end = (SDL_Point){ 0, 0 };
 
     return self;
 }
@@ -57,14 +56,14 @@ void textbox_render_highlight(struct Textbox* self, SDL_Renderer* rend)
 {
     if (self->highlighting)
     {
-        if (self->highlight_begin.y == self->highlight_end.y)
+        if (self->highlight_begin.y == self->cursor_pos.y)
         {
-            textbox_render_highlight_line(self, rend, self->highlight_begin.y, self->highlight_begin.x, self->highlight_end.x);
+            textbox_render_highlight_line(self, rend, self->highlight_begin.y, self->highlight_begin.x, self->cursor_pos.x);
         }
         else
         {
-            SDL_Point* top = (self->highlight_end.y < self->highlight_begin.y ? &self->highlight_end : &self->highlight_begin);
-            SDL_Point* bot = (self->highlight_end.y < self->highlight_begin.y ? &self->highlight_begin : &self->highlight_end);
+            SDL_Point* top = (self->cursor_pos.y < self->highlight_begin.y ? &self->cursor_pos : &self->highlight_begin);
+            SDL_Point* bot = (self->cursor_pos.y < self->highlight_begin.y ? &self->highlight_begin : &self->cursor_pos);
 
             textbox_render_highlight_line(self, rend, top->y, top->x, strlen(self->text->lines[top->y]));
             textbox_render_highlight_line(self, rend, bot->y, 0, bot->x);
@@ -299,10 +298,10 @@ void textbox_move_view_cursor(struct Textbox* self)
 
 void textbox_del_highlighted(struct Textbox* self, SDL_Renderer* rend)
 {
-    if (self->highlight_end.y == self->highlight_begin.y)
+    if (self->cursor_pos.y == self->highlight_begin.y)
     {
-        int left = self->highlight_begin.x < self->highlight_end.x ? self->highlight_begin.x : self->highlight_end.x;
-        int right = self->highlight_begin.x > self->highlight_end.x ? self->highlight_begin.x : self->highlight_end.x;
+        int left = self->highlight_begin.x < self->cursor_pos.x ? self->highlight_begin.x : self->cursor_pos.x;
+        int right = self->highlight_begin.x > self->cursor_pos.x ? self->highlight_begin.x : self->cursor_pos.x;
 
         textbox_del_highlighted_line(self, rend, self->highlight_begin.y, left, right);
         self->highlighting = false;
@@ -310,8 +309,8 @@ void textbox_del_highlighted(struct Textbox* self, SDL_Renderer* rend)
     }
     else
     {
-        SDL_Point* top = (self->highlight_end.y < self->highlight_begin.y ? &self->highlight_end : &self->highlight_begin);
-        SDL_Point* bot = (self->highlight_end.y < self->highlight_begin.y ? &self->highlight_begin : &self->highlight_end);
+        SDL_Point* top = (self->cursor_pos.y < self->highlight_begin.y ? &self->cursor_pos : &self->highlight_begin);
+        SDL_Point* bot = (self->cursor_pos.y < self->highlight_begin.y ? &self->highlight_begin : &self->cursor_pos);
 
         textbox_del_highlighted_line(self, rend, top->y, top->x, strlen(self->text->lines[top->y]));
         textbox_del_highlighted_line(self, rend, bot->y, 0, bot->x);

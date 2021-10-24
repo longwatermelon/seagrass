@@ -18,7 +18,7 @@ struct Textbox
 
     bool highlighting;
     // Measured in chars
-    SDL_Point highlight_begin, highlight_end;
+    SDL_Point highlight_begin;
 };
 
 struct Textbox* textbox_alloc(SDL_Rect rect, SDL_Renderer* rend, TTF_Font* font, SDL_Color color);
