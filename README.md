@@ -14,3 +14,9 @@ make
 ./seagrass
 ```
 
+# Installation
+
+`sudo make install` to install
+
+`sudo make uninstall` to remove
+
