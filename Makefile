@@ -23,3 +23,12 @@ clean:
 	rm lib/*
 	rm seagrass
 
+install:
+	cp seagrass /bin
+	mkdir /usr/share/seagrass
+	cp -r res /usr/share/seagrass/res
+
+uninstall:
+	rm /bin/seagrass
+	rm -rf /usr/share/seagrass
+

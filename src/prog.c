@@ -1,5 +1,6 @@
 #include "prog.h"
 #include "events.h"
+#include "gui/utils.h"
 #include "utils.h"
 #include "gui/text.h"
 #include "gui/textbox.h"
@@ -14,7 +15,9 @@ struct Prog* prog_alloc()
     self->window = SDL_CreateWindow("Seagrass", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 900, 700, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE);
     self->rend = SDL_CreateRenderer(self->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-    self->font = TTF_OpenFont("res/font.ttf", 16);
+    char* tmp = utils_find_resource("res/font.ttf");
+    self->font = TTF_OpenFont(tmp, 16);
+    free(tmp);
 
     int wx, wy;
     SDL_GetWindowSize(self->window, &wx, &wy);

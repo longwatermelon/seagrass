@@ -76,3 +76,19 @@ void utils_sort_alphabetically(char** arr, int len)
     }
 }
 
+
+char* utils_find_resource(const char* name)
+{
+#ifdef SEAGRASS_INSTALL
+    int len = strlen("/usr/share/seagrass/") + strlen(name) + 1;
+    char* path = malloc(sizeof(char) * len);
+
+    sprintf(path, "/usr/share/seagrass/%s", name);
+    return path;
+#else
+    char* path = malloc(sizeof(char) * (strlen(name) + 1));
+    sprintf(path, "%s", name);
+    return path;
+#endif
+}
+

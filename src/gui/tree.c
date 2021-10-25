@@ -13,7 +13,10 @@ struct Tree* tree_alloc(SDL_Point pos, const char* path, SDL_Renderer* rend)
     self->pos = pos;
     self->path = path;
 
-    self->font = TTF_OpenFont("res/font.ttf", 14);
+    char* tmp = utils_find_resource("res/font.ttf");
+    self->font = TTF_OpenFont(tmp, 14);
+    free(tmp);
+
     TTF_SizeText(self->font, " ", &self->char_dim.x, &self->char_dim.y);
 
     char* abspath = realpath(path, 0);
@@ -22,10 +25,22 @@ struct Tree* tree_alloc(SDL_Point pos, const char* path, SDL_Renderer* rend)
     node_toggle_opened(self->root, rend, self->font);
 
     self->ntextures = 4;
-    self->textures[TEX_FOLDER] = IMG_LoadTexture(rend, "res/folder.png");
-    self->textures[TEX_FILE] = IMG_LoadTexture(rend, "res/file.png");
-    self->textures[TEX_ARR_R] = IMG_LoadTexture(rend, "res/arrow_right.png");
-    self->textures[TEX_ARR_D] = IMG_LoadTexture(rend, "res/arrow_down.png");
+
+    tmp = utils_find_resource("res/folder.png");
+    self->textures[TEX_FOLDER] = IMG_LoadTexture(rend, tmp);
+    free(tmp);
+
+    tmp = utils_find_resource("res/file.png");
+    self->textures[TEX_FILE] = IMG_LoadTexture(rend, tmp);
+    free(tmp);
+
+    tmp = utils_find_resource("res/arrow_right.png");
+    self->textures[TEX_ARR_R] = IMG_LoadTexture(rend, tmp);
+    free(tmp);
+
+    tmp = utils_find_resource("res/arrow_down.png");
+    self->textures[TEX_ARR_D] = IMG_LoadTexture(rend, tmp);
+    free(tmp);
 
     self->highlighted_y = -1;
 
