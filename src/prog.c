@@ -1,7 +1,6 @@
 #include "prog.h"
 #include "events.h"
 #include "gui/utils.h"
-#include "utils.h"
 #include "gui/text.h"
 #include "gui/textbox.h"
 #include "gui/fs.h"
