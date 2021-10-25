@@ -1,6 +1,7 @@
 #include "utils.h"
 #include <stdlib.h>
 #include <string.h>
+#include <dirent.h>
 
 
 SDL_Texture* utils_render_text(SDL_Renderer* rend, const char* text, TTF_Font* font, SDL_Color color)
@@ -79,16 +80,24 @@ void utils_sort_alphabetically(char** arr, int len)
 
 char* utils_find_resource(const char* name)
 {
-#ifdef SEAGRASS_INSTALL
-    int len = strlen("/usr/share/seagrass/") + strlen(name) + 1;
-    char* path = malloc(sizeof(char) * len);
+    DIR* dir = opendir("/usr/share/seagrass");
 
-    sprintf(path, "/usr/share/seagrass/%s", name);
-    return path;
-#else
-    char* path = malloc(sizeof(char) * (strlen(name) + 1));
-    sprintf(path, "%s", name);
-    return path;
-#endif
+    // Use resources from /usr/share if possible
+    if (dir)
+    {
+        closedir(dir);
+
+        int len = strlen("/usr/share/seagrass/") + strlen(name) + 1;
+        char* path = malloc(sizeof(char) * len);
+
+        sprintf(path, "/usr/share/seagrass/%s", name);
+        return path;
+    }
+    else
+    {
+        char* path = malloc(sizeof(char) * (strlen(name) + 1));
+        sprintf(path, "%s", name);
+        return path;
+    }
 }
 
