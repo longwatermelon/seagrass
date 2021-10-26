@@ -7,6 +7,7 @@
 #include "gui/text.h"
 #include <stdbool.h>
 #include <dirent.h>
+#include <limits.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
