@@ -1,6 +1,8 @@
 # seagrass
 Grass rewrite in C
 
+Supported on linux and mac, not on windows
+
 # Dependencies
 * SDL2
 * SDL2_image
