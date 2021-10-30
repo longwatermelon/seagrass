@@ -19,8 +19,7 @@ obj/src/%.o: src/%.c src/%.h
 	$(CC) $(CFLAGS) -c $< -o $@ $(LIBS)
 
 clean:
-	rm -rf obj/*
-	rm lib/*
+	rm -rf obj lib
 	rm seagrass
 
 install:
