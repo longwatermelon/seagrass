@@ -366,7 +366,7 @@ char* textbox_get_text(struct Textbox* self)
 }
 
 
-static SDL_Point textbox_char_to_pix_pos(struct Textbox* self, SDL_Point pos)
+SDL_Point textbox_char_to_pix_pos(struct Textbox* self, SDL_Point pos)
 {
     return (SDL_Point){
         .x = self->rect.x + (pos.x * self->text->char_dim.x),

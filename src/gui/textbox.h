@@ -61,7 +61,7 @@ void textbox_set_text(struct Textbox* self, SDL_Renderer* rend, TTF_Font* font, 
 char* textbox_get_text(struct Textbox* self);
 
 // Converts character coordinates (row, col) to pixel coordinates
-static SDL_Point textbox_char_to_pix_pos(struct Textbox* self, SDL_Point pos);
+SDL_Point textbox_char_to_pix_pos(struct Textbox* self, SDL_Point pos);
 
 #endif
 

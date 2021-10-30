@@ -2,6 +2,7 @@
 #include "prog.h"
 #include "gui/textbox.h"
 #include "gui/utils.h"
+#include <SDL2/SDL_keycode.h>
 #include <sys/stat.h>
 
 bool g_mouse_down = false;
@@ -70,6 +71,10 @@ void events_keydown(struct Prog* p, SDL_Event* evt)
         case SDLK_DOWN:
             p->selected_textbox->highlighting = false;
             textbox_move_cursor(p->selected_textbox, 0, 1);
+            break;
+        case SDLK_TAB:
+            for (int i = 0; i < 4; ++i)
+                textbox_add_char(p->selected_textbox, p->rend, ' ');
             break;
         }
 

@@ -2,7 +2,7 @@ SRC=$(wildcard src/*.c)
 OBJS=$(addprefix obj/, $(SRC:.c=.o))
 
 CC=gcc
-CFLAGS=-ggdb -std=gnu17
+CFLAGS=-ggdb -std=gnu17 -Wall -Werror
 LIBS=-Llib -lgui -lSDL2 -lSDL2_image -lSDL2_ttf -lm
 SUBDIRS=src/gui
 

@@ -35,7 +35,7 @@ void text_remove_texture(struct Text* self, SDL_Renderer* rend, int index);
 char* text_as_str(struct Text* self);
 
 // Split up regular string by \n into multiple textures
-static SDL_Texture** text_split_str_into_textures(struct Text* self, SDL_Renderer* rend);
+SDL_Texture** text_split_str_into_textures(struct Text* self, SDL_Renderer* rend);
 
 #endif
 

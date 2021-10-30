@@ -134,7 +134,7 @@ void node_lowest_y(struct Node* self, int* y)
 }
 
 
-static struct Node** node_read_dir_node(struct Node* self, SDL_Renderer* rend, TTF_Font* font, const char* path, int* count)
+struct Node** node_read_dir_node(struct Node* self, SDL_Renderer* rend, TTF_Font* font, const char* path, int* count)
 {
     // Directories always go on top of files
     int ndirs;
