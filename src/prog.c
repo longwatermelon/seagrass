@@ -1,5 +1,6 @@
 #include "prog.h"
 #include "events.h"
+#include "gui/button.h"
 #include "gui/utils.h"
 #include "gui/text.h"
 #include "gui/textbox.h"
@@ -45,6 +46,9 @@ struct Prog* prog_alloc()
 
 void prog_free(struct Prog* self)
 {
+    button_free(self->binary_confirm_btn);
+    text_free(self->binary_warning_text);
+
     textbox_free(self->main_textbox);
     scrollbar_free(self->main_scrollbar);
     tree_free(self->file_tree);
