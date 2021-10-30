@@ -75,10 +75,13 @@ int tree_render(struct Tree* self, SDL_Renderer* rend)
             .h = self->char_dim.y
         };
 
-        SDL_SetRenderDrawBlendMode(rend, SDL_BLENDMODE_BLEND);
-        SDL_SetRenderDrawColor(rend, 255, 255, 255, 125);
-        SDL_RenderFillRect(rend, &highlight);
-        SDL_SetRenderDrawBlendMode(rend, SDL_BLENDMODE_NONE);
+        if (highlight.y > self->orig_pos.y)
+        {
+            SDL_SetRenderDrawBlendMode(rend, SDL_BLENDMODE_BLEND);
+            SDL_SetRenderDrawColor(rend, 255, 255, 255, 125);
+            SDL_RenderFillRect(rend, &highlight);
+            SDL_SetRenderDrawBlendMode(rend, SDL_BLENDMODE_NONE);
+        }
     }
 
     return start.y;
@@ -100,7 +103,9 @@ void tree_render_highlight(struct Tree* self, SDL_Renderer* rend, int my, int lo
         .h = self->char_dim.y
     };
 
-    SDL_RenderFillRect(rend, &rect);
+    if (rect.y > self->orig_pos.y)
+        SDL_RenderFillRect(rend, &rect);
+
     SDL_SetRenderDrawBlendMode(rend, SDL_BLENDMODE_NONE);
 }
 

@@ -181,9 +181,12 @@ void events_mouse_left_tree(struct Prog* p, SDL_Event* evt)
     SDL_Point mouse;
     SDL_GetMouseState(&mouse.x, &mouse.y);
 
+    if (mouse.x > p->main_textbox->rect.x || mouse.y < p->file_tree->orig_pos.y)
+        return;
+
     struct Node* clicked = tree_clicked(p->file_tree, mouse.x, mouse.y);
 
-    if (clicked && mouse.x < p->main_textbox->rect.x)
+    if (clicked)
     {
         p->file_tree->highlighted_y = mouse.y - (mouse.y % p->file_tree->char_dim.y);
 
