@@ -80,6 +80,7 @@ void text_render(struct Text* self, SDL_Renderer* rend, SDL_Point view_pos, SDL_
 
 void text_redo_textures(struct Text* self, SDL_Renderer* rend)
 {
+    // TODO load only textures that are currently visible to load large text faster
     for (int i = 0; i < self->nlines; ++i)
     {
         if (self->textures[i])
