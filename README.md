@@ -9,6 +9,7 @@ Supported on linux and mac, not on windows
 * SDL2_ttf
 
 Debian: `sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev`
+
 Arch: `sudo pacman -S sdl2 sdl2-image sdl2-ttf`
 
 # Building
