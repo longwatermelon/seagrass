@@ -169,7 +169,7 @@ void textbox_add_char(struct Textbox* self, SDL_Renderer* rend, char c)
     curr_line = realloc(curr_line, sizeof(char) * (len + 1));
     curr_line[len] = '\0';
 
-    memcpy(&curr_line[self->cursor_pos.x + 1],
+    memmove(&curr_line[self->cursor_pos.x + 1],
            &curr_line[self->cursor_pos.x],
            sizeof(char) * (strlen(curr_line) - self->cursor_pos.x));
 
@@ -217,7 +217,7 @@ void textbox_del_char(struct Textbox* self, SDL_Renderer* rend)
     else
     {
         char* line = self->text->lines[self->cursor_pos.y];
-        memcpy(&line[self->cursor_pos.x - 1],
+        memmove(&line[self->cursor_pos.x - 1],
                &line[self->cursor_pos.x],
                sizeof(char) * (strlen(line) - self->cursor_pos.x));
 
@@ -341,7 +341,7 @@ void textbox_del_highlighted_line(struct Textbox* self, SDL_Renderer* rend, int 
 
     int len = strlen(line) - (end - begin);
 
-    memcpy(&line[begin], &line[end], strlen(line) - end);
+    memmove(&line[begin], &line[end], strlen(line) - end);
     line[len] = '\0';
     line = realloc(line, sizeof(char) * (len + 1));
 
